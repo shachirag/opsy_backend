@@ -1,0 +1,38 @@
+basePath: /
+definitions:
+  userAuth.LoginReqDto:
+    properties:
+      email:
+        type: string
+      password:
+        type: string
+    type: object
+host: localhost:5080
+info:
+  contact:
+    name: Priyanshu Rai
+  description: Opsy Backend Backend (in GoLang)
+  license:
+    name: MIT
+  title: Opsy Backend
+  version: 0.0.1
+paths:
+  /user/login:
+    post:
+      consumes:
+      - application/json
+      description: Login User
+      parameters:
+      - description: Login User
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/userAuth.LoginReqDto'
+      produces:
+      - application/json
+      responses: {}
+      summary: Login User
+      tags:
+      - user
+swagger: "2.0"
