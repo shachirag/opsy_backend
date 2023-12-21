@@ -19,3 +19,7 @@ type UserPasswordResDto struct {
 	Status  bool   `json:"status"`
 	Message string `json:"message"`
 }
+
+type ResendOtpreqDto struct {
+	Email string `json:"email" bson:"email"`
+}

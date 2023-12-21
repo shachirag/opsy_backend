@@ -3,6 +3,7 @@ package utils
 import (
 	"context"
 	"opsy_backend/database"
+	"os"
 
 	"github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/aws/aws-sdk-go-v2/service/ses"
@@ -10,11 +11,11 @@ import (
 )
 
 var (
-	// senderEmail = os.Getenv("SENDER_EMAIL")
-	senderEmail = "opsy@yopmail.com"
-	charSet     = aws.String("UTF-8")
-	sender      = aws.String(senderEmail)
-	subject     = aws.String("otp for user signup")
+	senderEmail = os.Getenv("SENDER_EMAIL")
+	// senderEmail = "opsy@yopmail.com"
+	charSet = aws.String("UTF-8")
+	sender  = aws.String(senderEmail)
+	subject = aws.String("otp for user signup")
 )
 
 func SendEmail(to string, link string) (*ses.SendEmailOutput, error) {

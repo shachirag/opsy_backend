@@ -29,4 +29,5 @@ func UsersSetupsRoutes(app *fiber.App) {
 	user.Post("/forgot-password", userAuthenticate.ForgotPassword)
 	user.Post("/verify-otp", userAuthenticate.VerifyOtp)
 	user.Put("/reset-password", userAuthenticate.ResetPasswordAfterOtp)
+	user.Post("/resend-otp",userAuthenticate.ResendOTP)
 }

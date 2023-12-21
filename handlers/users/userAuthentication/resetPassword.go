@@ -18,7 +18,7 @@ import (
 // @Param user body userAuth.ResetPasswordAfterOtpReqDto true "Reset user password after OTP verification"
 // @Produce json
 // @Success 200 {object} userAuth.UserPasswordResDto
-// @Router /user/reset-password [Put]
+// @Router /user/reset-password [put]
 func ResetPasswordAfterOtp(c *fiber.Ctx) error {
 	var (
 		userColl = database.GetCollection("users")
