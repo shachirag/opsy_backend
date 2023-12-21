@@ -1,11 +1,9 @@
 package userAuthenticate
 
 import (
-	"fmt"
 	"opsy_backend/database"
-	userAuth "opsy_backend/dto"
+	userAuth "opsy_backend/dto/users/userAuthentication"
 	"opsy_backend/entity"
-	"opsy_backend/utils"
 	"time"
 
 	"github.com/gofiber/fiber/v2"
@@ -23,8 +21,6 @@ import (
 //
 // @Param id path string true "user ID"
 // @Param user formData userAuth.UpdateUserReqDto true "Update data of user"
-// @Param newUserImage formData file false "user profile image"
-// @Param newQualifications formData file false "new qualification images"
 // @Produce json
 // @Success 200 {object} userAuth.UpdateUserResDto
 // @Router /user/update-user-data/{id} [put]
@@ -79,81 +75,12 @@ func UpdateUser(c *fiber.Ctx) error {
 		})
 	}
 
-	// Access the MultipartForm directly from the fiber.Ctx
-	form, err := c.MultipartForm()
-	if err != nil {
-		return c.Status(fiber.StatusInternalServerError).JSON(userAuth.UpdateUserResDto{
-			Status:  false,
-			Message: "Failed to get multipart form: " + err.Error(),
-		})
-	}
-
-	// Get the file header for the "images" field from the form
-	formFiles := form.File["newQualifications"]
-
-	// Upload each new image to S3 and get the S3 URLs
-	newDocumentURLs := make([]string, 0)
-	for _, formFile := range formFiles {
-		file, err := formFile.Open()
-		if err != nil {
-			return c.Status(fiber.StatusBadRequest).JSON(userAuth.UpdateUserResDto{
-				Status:  false,
-				Message: "Failed to upload document to S3: " + err.Error(),
-			})
-		}
-
-		// Generate a unique filename for each image
-		id := primitive.NewObjectID()
-		fileName := fmt.Sprintf("qualification/%v-document-%s", id.Hex(), formFile.Filename)
-
-		// Upload the document to S3 and get the S3 URL
-		documentURL, err := utils.UploadToS3(fileName, file)
-		if err != nil {
-			return c.Status(fiber.StatusInternalServerError).JSON(userAuth.UpdateUserResDto{
-				Status:  false,
-				Message: "Failed to upload document to S3: " + err.Error(),
-			})
-		}
-
-		newDocumentURLs = append(newDocumentURLs, documentURL)
-	}
-
-	formFile, err := c.FormFile("newUserImage")
-	var imageURL string
-	if err != nil {
-		imageURL = data.OldProfileImage
-	} else {
-		// New image uploaded
-		file, err := formFile.Open()
-		if err != nil {
-			return c.Status(fiber.StatusInternalServerError).JSON(userAuth.UpdateUserResDto{
-				Status:  false,
-				Message: "Failed to open image file: " + err.Error(),
-			})
-		}
-		defer file.Close()
-
-		id := primitive.NewObjectID()
-		fileName := fmt.Sprintf("user/%v-profilepic.jpg", id.Hex())
-
-		imageURL, err = utils.UploadToS3(fileName, file)
-		if err != nil {
-			return c.Status(fiber.StatusInternalServerError).JSON(userAuth.UpdateUserResDto{
-				Status:  false,
-				Message: "Failed to upload image to S3: " + err.Error(),
-			})
-		}
-	}
-
 	// Update the admin document with new data
 	update := bson.M{
-		"name": data.Name,
-		},
-		"image":     imageURL,
+		"name":      data.Name,
 		"updatedAt": time.Now().UTC(),
 	}
 
-	update["qualifications"] = append(data.OldQualifications, newDocumentURLs...)
 	updateFields := bson.M{"$set": update}
 	// Execute the update operation
 	updateRes, err := userColl.UpdateOne(ctx, filter, updateFields)
