@@ -32,5 +32,5 @@ func UsersSetupsRoutes(app *fiber.App) {
 	user.Post("/resend-otp", userAuthenticate.ResendOTP)
 	user.Put("/update-user-data/:id", userAuthenticate.UpdateUser)
 	user.Get("/get-info/:id",userAuthenticate.FetchUserById)
-	user.Put("/change-passowrd/:id",userAuthenticate.ChangeUserPassword)
+	user.Put("/change-user-password/:id",userAuthenticate.ChangeUserPassword)
 }
