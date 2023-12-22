@@ -2,7 +2,7 @@ package userAuthenticate
 
 import (
 	"opsy_backend/database"
-	userAuth "opsy_backend/dto"
+	userAuth "opsy_backend/dto/users/userAuthentication"
 	"opsy_backend/entity"
 	"opsy_backend/utils"
 
