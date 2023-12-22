@@ -132,7 +132,7 @@ definitions:
       token:
         type: string
     type: object
-host: localhost:5080
+host: nssdmvtpj2.us-east-1.awsapprunner.com
 info:
   contact:
     name: Priyanshu Rai

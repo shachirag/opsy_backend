@@ -7,7 +7,7 @@ import "opsy_backend/app"
 // @description Opsy Backend Backend (in GoLang)
 // @contact.name Priyanshu Rai
 // @license.name MIT
-// @host localhost:5080
+// @host nssdmvtpj2.us-east-1.awsapprunner.com
 // @BasePath /
 func main() {
 	err := app.SetupAndRunApp()

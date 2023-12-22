@@ -11,7 +11,7 @@
         },
         "version": "0.0.1"
     },
-    "host": "localhost:5080",
+    "host": "nssdmvtpj2.us-east-1.awsapprunner.com",
     "basePath": "/",
     "paths": {
         "/user/change-password/{id}": {
