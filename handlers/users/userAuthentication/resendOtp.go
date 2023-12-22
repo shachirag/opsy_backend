@@ -24,7 +24,7 @@ import (
 func ResendOTP(c *fiber.Ctx) error {
 	var (
 		otpColl = database.GetCollection("otp")
-		data    userAuth.ResendOtpreqDto
+		data    userAuth.ResendOtpReqDto
 		otpData entity.OtpEntity
 	)
 

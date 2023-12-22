@@ -1,10 +1,135 @@
 basePath: /
 definitions:
+  userAuth.ChangeUserPasswordReqDto:
+    properties:
+      confirmPassword:
+        type: string
+      currentPassword:
+        type: string
+      newPassword:
+        type: string
+    type: object
+  userAuth.ChangeUserPasswordResDto:
+    properties:
+      message:
+        type: string
+      status:
+        type: boolean
+    type: object
+  userAuth.GetUserResDto:
+    properties:
+      data:
+        $ref: '#/definitions/userAuth.UserData'
+      message:
+        type: string
+      status:
+        type: boolean
+    type: object
   userAuth.LoginReqDto:
     properties:
       email:
         type: string
       password:
+        type: string
+    type: object
+  userAuth.ResendOtpReqDto:
+    properties:
+      email:
+        type: string
+    type: object
+  userAuth.ResetPasswordAfterOtpReqDto:
+    properties:
+      confirmPassword:
+        type: string
+      email:
+        type: string
+      newPassword:
+        type: string
+    type: object
+  userAuth.SignupReqDto:
+    properties:
+      email:
+        type: string
+    type: object
+  userAuth.SignupResDto:
+    properties:
+      message:
+        type: string
+      status:
+        type: boolean
+    type: object
+  userAuth.UpdateUserResDto:
+    properties:
+      message:
+        type: string
+      status:
+        type: boolean
+    type: object
+  userAuth.UserData:
+    properties:
+      createdAt:
+        type: string
+      email:
+        type: string
+      id:
+        type: string
+      name:
+        type: string
+      updatedAt:
+        type: string
+    type: object
+  userAuth.UserForgotPasswordReqDto:
+    properties:
+      email:
+        type: string
+    type: object
+  userAuth.UserPasswordResDto:
+    properties:
+      message:
+        type: string
+      status:
+        type: boolean
+    type: object
+  userAuth.UserResDto:
+    properties:
+      createdAt:
+        type: string
+      email:
+        type: string
+      id:
+        type: string
+      name:
+        type: string
+      updatedAt:
+        type: string
+    type: object
+  userAuth.VerifyOtpReqDto:
+    properties:
+      email:
+        type: string
+      otp:
+        type: string
+    type: object
+  userAuth.VerifyOtpSignupReqDto:
+    properties:
+      email:
+        type: string
+      name:
+        type: string
+      otp:
+        type: string
+      password:
+        type: string
+    type: object
+  userAuth.VerifyOtpSignupResDto:
+    properties:
+      data:
+        $ref: '#/definitions/userAuth.UserResDto'
+      message:
+        type: string
+      status:
+        type: boolean
+      token:
         type: string
     type: object
 host: localhost:5080
@@ -17,6 +142,86 @@ info:
   title: Opsy Backend
   version: 0.0.1
 paths:
+  /user/change-password/{id}:
+    put:
+      consumes:
+      - application/json
+      description: change admin Password
+      parameters:
+      - description: user ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Authentication header
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: Change password of user
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/userAuth.ChangeUserPasswordReqDto'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/userAuth.ChangeUserPasswordResDto'
+      summary: Change user Password
+      tags:
+      - user authorization
+  /user/forgot-password:
+    post:
+      consumes:
+      - application/json
+      description: Forgot Password
+      parameters:
+      - description: forgot password for user
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/userAuth.UserForgotPasswordReqDto'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/userAuth.UserPasswordResDto'
+      summary: Forgot Password
+      tags:
+      - user authorization
+  /user/get-info/{id}:
+    get:
+      consumes:
+      - application/json
+      description: Fetch user By ID
+      parameters:
+      - description: Authentication header
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: business user ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/userAuth.GetUserResDto'
+      summary: Fetch user By ID
+      tags:
+      - user authorization
   /user/login:
     post:
       consumes:
@@ -34,5 +239,143 @@ paths:
       responses: {}
       summary: Login User
       tags:
-      - user
+      - user authorization
+  /user/resend-otp:
+    post:
+      consumes:
+      - application/json
+      description: Resend 6 digit OTP to email
+      parameters:
+      - description: Resend 6 digit OTP to email
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/userAuth.ResendOtpReqDto'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/userAuth.UserPasswordResDto'
+      summary: Resend OTP
+      tags:
+      - user authorization
+  /user/reset-password:
+    put:
+      consumes:
+      - application/json
+      description: Reset user password after OTP verification using the new password
+        and confirm password
+      parameters:
+      - description: Reset user password after OTP verification
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/userAuth.ResetPasswordAfterOtpReqDto'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/userAuth.UserPasswordResDto'
+      summary: Reset user Password after OTP Verification
+      tags:
+      - user authorization
+  /user/signup:
+    post:
+      description: Signup user
+      parameters:
+      - description: send 6 digit otp to email for signup
+        in: body
+        name: signup
+        required: true
+        schema:
+          $ref: '#/definitions/userAuth.SignupReqDto'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/userAuth.SignupResDto'
+      summary: Signup user
+      tags:
+      - user authorization
+  /user/update-user-data/{id}:
+    put:
+      consumes:
+      - multipart/form-data
+      description: Update user
+      parameters:
+      - description: Authentication header
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: user ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - in: formData
+        name: name
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/userAuth.UpdateUserResDto'
+      summary: Update user
+      tags:
+      - user authorization
+  /user/verify-otp:
+    post:
+      consumes:
+      - application/json
+      description: Verify the entered 6 digit OTP
+      parameters:
+      - description: Verify 6 digit OTP
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/userAuth.VerifyOtpReqDto'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/userAuth.UserPasswordResDto'
+      summary: Verify user OTP
+      tags:
+      - user authorization
+  /user/verify-otp-for-signup:
+    post:
+      consumes:
+      - application/json
+      description: Verify the entered 6 digit OTP
+      parameters:
+      - description: Verify 6 digit OTP and insert data into database
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/userAuth.VerifyOtpSignupReqDto'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/userAuth.VerifyOtpSignupResDto'
+      summary: Verify OTP for signup
+      tags:
+      - user authorization
 swagger: "2.0"

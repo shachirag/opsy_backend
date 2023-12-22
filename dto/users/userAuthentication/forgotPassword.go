@@ -20,6 +20,6 @@ type UserPasswordResDto struct {
 	Message string `json:"message"`
 }
 
-type ResendOtpreqDto struct {
+type ResendOtpReqDto struct {
 	Email string `json:"email" bson:"email"`
 }
