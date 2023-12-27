@@ -26,7 +26,7 @@ func FetchAllMiscData(c *fiber.Ctx) error {
 
 	// Fetch the categories data-
 	var miscdata userAuth.CategoriesRes
-	categoryFilter := bson.M{"_id": "phycicalHealth"}
+	categoryFilter := bson.M{"_id": "physicalHealth"}
 	cursor, err := miscColl.Find(ctx, categoryFilter)
 	if err != nil {
 		return c.Status(fiber.StatusInternalServerError).JSON(userAuth.CatgoriesResDto{

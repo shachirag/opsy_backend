@@ -20,3 +20,9 @@ type MentalHealth struct {
 	Popular []string `json:"popular"`
 	Other   []string `json:"other"`
 }
+
+type Misc struct {
+	ID      string   `bson:"_id"`
+	Popular []string `bson:"popular"`
+	Other   []string `bson:"other"`
+}
