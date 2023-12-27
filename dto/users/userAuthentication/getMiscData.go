@@ -7,11 +7,11 @@ type CatgoriesResDto struct {
 }
 
 type CategoriesRes struct {
-	PhycicalHealth PhycicalHealth `json:"physicalHealth"`
+	PhysicalHealth PhysicalHealth`json:"physicalHealth"`
 	MentalHealth   MentalHealth   `json:"mentalHealth"`
 }
 
-type PhycicalHealth struct {
+type PhysicalHealth struct {
 	Popular []string `json:"popular"`
 	Other   []string `json:"other"`
 }
@@ -19,10 +19,4 @@ type PhycicalHealth struct {
 type MentalHealth struct {
 	Popular []string `json:"popular"`
 	Other   []string `json:"other"`
-}
-
-type Misc struct {
-	ID      string   `bson:"_id"`
-	Popular []string `bson:"popular"`
-	Other   []string `bson:"other"`
 }

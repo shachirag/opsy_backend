@@ -3,55 +3,60 @@ package userAuthenticate
 import (
 	"opsy_backend/database"
 	userAuth "opsy_backend/dto/users/userAuthentication"
+	"opsy_backend/entity"
 
 	"github.com/gofiber/fiber/v2"
 	"go.mongodb.org/mongo-driver/bson"
 )
 
-// var ctx = context.Background()
-
-// @Summary Fetch All Categories
-// @Description Fetch All Categories
-// @Tags expertise for users
+// @Summary Fetch All misc data
+// @Description Fetch All misc data
+// @Tags user authorization
 // @Accept application/json
 //
-//	@Param Authorization header	string true	"Authentication header"
+//	@Param Authorization header string true "Authentication header"
 //
 // @Produce json
-// @Success 200 {object} expertise.CatgoriesResDto
-// @Router /user/get-categories [get]
+// @Success 200 {object} userAuth.CatgoriesResDto
+// @Router /user/get-misc-data [get]
 func FetchAllMiscData(c *fiber.Ctx) error {
 	// Get the misc collection
 	miscColl := database.GetCollection("misc")
 
-	// Fetch the categories data-
-	var miscdata userAuth.CategoriesRes
-	categoryFilter := bson.M{"_id": "physicalHealth"}
-	cursor, err := miscColl.Find(ctx, categoryFilter)
+	var physicalHealth entity.MiscEntity
+	physicalHealthFilter := bson.M{"_id": "physicalHealth"}
+	err := miscColl.FindOne(ctx, physicalHealthFilter).Decode(&physicalHealth)
 	if err != nil {
 		return c.Status(fiber.StatusInternalServerError).JSON(userAuth.CatgoriesResDto{
 			Status:  false,
-			Message: "Failed to fetch categories data: " + err.Error(),
+			Message: "Failed to fetch physical health data: " + err.Error(),
 		})
 	}
 
-	for cursor.Next(ctx) {
-		err := cursor.Decode(&miscdata)
-		if err != nil {
-			return c.Status(fiber.StatusInternalServerError).JSON(userAuth.CatgoriesResDto{
-				Status:  false,
-				Message: "Failed to decode  data: " + err.Error(),
-			})
-		}
+	var mentalHealth entity.MiscEntity
+	mentalHealthFilter := bson.M{"_id": "mentalHealth"}
+	err = miscColl.FindOne(ctx, mentalHealthFilter).Decode(&mentalHealth)
+	if err != nil {
+		return c.Status(fiber.StatusInternalServerError).JSON(userAuth.CatgoriesResDto{
+			Status:  false,
+			Message: "Failed to fetch mental health data: " + err.Error(),
+		})
 	}
 
-	
-
-	// Prepare the response
+	// Map retrieved data to response structure
 	response := userAuth.CatgoriesResDto{
 		Status:  true,
-		Message: "Data fetched successfully",
-		Data:    miscdata,
+		Message: "Misc data fetched successfully",
+		Data: userAuth.CategoriesRes{
+			PhysicalHealth: userAuth.PhysicalHealth{
+				Popular: physicalHealth.Popular,
+				Other:   physicalHealth.Other,
+			},
+			MentalHealth: userAuth.MentalHealth{
+				Popular: mentalHealth.Popular,
+				Other:   mentalHealth.Other,
+			},
+		},
 	}
 
 	return c.Status(fiber.StatusOK).JSON(response)
