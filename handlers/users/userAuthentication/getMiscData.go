@@ -45,15 +45,7 @@ func FetchAllMiscData(c *fiber.Ctx) error {
 		}
 	}
 
-	// categorydata=userAuth.CategoriesRes{
-	// PhycicalHealth:miscdata.Popular,
-	// }
-	// responseCategories := make([]userAuth.CategoriesRes, len(categoriesData.PhycicalHealth.Popular))
-	// for i, categories := range categoriesData.phycicalHealth {
-	// 	responseCategories[i] = userAuth.CategoriesRes{
-
-	// 	}
-	// }
+	
 
 	// Prepare the response
 	response := userAuth.CatgoriesResDto{
