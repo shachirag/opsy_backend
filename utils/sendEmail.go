@@ -10,21 +10,21 @@ import (
 	"github.com/aws/aws-sdk-go-v2/service/ses/types"
 )
 
-var (
-	senderEmail = os.Getenv("SENDER_EMAIL")
-	// senderEmail = "opsy@yopmail.com"
-	charSet = aws.String("UTF-8")
-	sender  = aws.String(senderEmail)
-	subject = aws.String("otp for user signup")
-)
+
 
 func SendEmail(to string, link string) (*ses.SendEmailOutput, error) {
+	var (
+		senderEmail = os.Getenv("SENDER_EMAIL")
+		charSet = aws.String("UTF-8")
+		subject = aws.String("otp for user signup")
+	)
 	sesClient := database.GetSesClient()
 
 	input := &ses.SendEmailInput{
 		Destination: &types.Destination{
 			ToAddresses: []string{
-				to,
+				// to,
+				"opsy@yopmail.com",
 			},
 		},
 		Message: &types.Message{
@@ -43,7 +43,7 @@ func SendEmail(to string, link string) (*ses.SendEmailOutput, error) {
 				Charset: charSet,
 			},
 		},
-		Source: sender,
+		Source:  aws.String(senderEmail),
 	}
 
 	return sesClient.SendEmail(context.Background(), input)

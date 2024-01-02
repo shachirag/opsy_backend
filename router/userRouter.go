@@ -2,6 +2,7 @@ package router
 
 import (
 	"opsy_backend/handlers"
+	"opsy_backend/handlers/users/logEntry"
 	userAuthenticate "opsy_backend/handlers/users/userAuthentication"
 
 	"github.com/gofiber/fiber/v2"
@@ -34,4 +35,6 @@ func UsersSetupsRoutes(app *fiber.App) {
 	user.Get("/get-info/:id",userAuthenticate.FetchUserById)
 	user.Put("/change-password/:id",userAuthenticate.ChangeUserPassword)
 	user.Get("/get-misc-data/:id",userAuthenticate.FetchAllMiscData)
+	//log Entries
+	user.Post("/create-log-entry",logEntry.CreateLogEntry)
 }
