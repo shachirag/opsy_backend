@@ -37,4 +37,5 @@ func UsersSetupsRoutes(app *fiber.App) {
 	user.Get("/get-misc-data/:id",userAuthenticate.FetchAllMiscData)
 	//log Entries
 	user.Post("/create-log-entry",logEntry.CreateLogEntry)
+	user.Get("/fetch-all-data",logEntry.FetchAllData)
 }

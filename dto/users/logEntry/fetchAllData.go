@@ -9,7 +9,7 @@ import (
 type CatgoriesResDto struct {
 	Status  bool          `json:"status"`
 	Message string        `json:"message"`
-	Data    CategoriesRes `json:"data"`
+	Data    []CategoriesRes `json:"data"`
 }
 
 type CategoriesRes struct {
