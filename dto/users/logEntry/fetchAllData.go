@@ -17,7 +17,7 @@ type CategoriesRes struct {
 	Type        string             `json:"type" bson:"type"`
 	Feel        string             `json:"feel" bson:"feel"`
 	When        time.Time          `json:"when" bson:"when"`
-	PainLevel   int32              `json:"painLevel" bson:"painlevel"`
+	PainLevel   int32              `json:"painLevel" bson:"painLevel"`
 	CreatedAt   time.Time          `json:"createdAt" bson:"createdAt"`
 	UpdatedAt   time.Time          `json:"updatedAt" bson:"updatedAt"`
 }
