@@ -1,4 +1,4 @@
- package logEntry
+package logEntry
 
 import (
 	"opsy_backend/database"
@@ -16,7 +16,7 @@ import (
 // @Produce json
 // @Success 200 {object} logEntry.catagoriesRes
 // @Router /customer/fetch-all-data [get]
-func FetchAllData(c *fiber.Ctx) error {     
+func FetchAllData(c *fiber.Ctx) error {
 	var (
 		logEntryColl = database.GetCollection("logEntry")
 	)
@@ -47,7 +47,7 @@ func FetchAllData(c *fiber.Ctx) error {
 			Id:        logEntryEntity.Id,
 			Type:      logEntryEntity.Type,
 			When:      logEntryEntity.When,
-			PainLevel:  logEntryEntity.PainLevel,
+			PainLevel: logEntryEntity.PainLevel,
 			Feel:      logEntryEntity.Feel,
 			CreatedAt: logEntryEntity.CreatedAt,
 			UpdatedAt: logEntryEntity.UpdatedAt,
@@ -55,17 +55,17 @@ func FetchAllData(c *fiber.Ctx) error {
 		)
 	}
 
-    // Check if is empty
-    if len(logEntryData ) == 0 {
-        return c.Status(fiber.StatusOK).JSON(logEntry.CatgoriesResDto{
-            Status:  false,
-            Message: "No data found.",
-        })
-    }
+	// Check if is empty
+	if len(logEntryData) == 0 {
+		return c.Status(fiber.StatusOK).JSON(logEntry.CatgoriesResDto{
+			Status:  false,
+			Message: "No data found.",
+		})
+	}
 
-    return c.Status(fiber.StatusOK).JSON(logEntry.CatgoriesResDto{
-        Status:      true,
-        Message:     "Successfully fetched the data.",
-        Data: logEntryData, // Include the fetched data
-    })
+	return c.Status(fiber.StatusOK).JSON(logEntry.CatgoriesResDto{
+		Status:  true,
+		Message: "Successfully fetched the data.",
+		Data:    logEntryData, // Include the fetched data
+	})
 }
