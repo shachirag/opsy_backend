@@ -20,26 +20,6 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
-        "/customer/fetch-all-data": {
-            "get": {
-                "description": "fetch all requied data",
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "logEntry"
-                ],
-                "summary": "fetch all requied data",
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/logEntry.CatgoriesResDto"
-                        }
-                    }
-                }
-            }
-        },
         "/user/change-password/{id}": {
             "put": {
                 "description": "change admin Password",
@@ -114,6 +94,26 @@ const docTemplate = `{
                         "description": "OK",
                         "schema": {
                             "$ref": "#/definitions/logEntry.GetLogEntryResDto"
+                        }
+                    }
+                }
+            }
+        },
+        "/user/fetch-all-data": {
+            "get": {
+                "description": "fetch all requied data",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "logEntry"
+                ],
+                "summary": "fetch all requied data",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/logEntry.CatgoriesResDto"
                         }
                     }
                 }

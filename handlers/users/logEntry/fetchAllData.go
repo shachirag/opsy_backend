@@ -4,6 +4,7 @@ import (
 	"opsy_backend/database"
 	logEntry "opsy_backend/dto/users/logEntry"
 	"opsy_backend/entity"
+	"time"
 
 	"github.com/gofiber/fiber/v2"
 	"go.mongodb.org/mongo-driver/bson"
@@ -15,13 +16,19 @@ import (
 // @Description fetch all requied data
 // @Produce json
 // @Success 200 {object} logEntry.CatgoriesResDto
-// @Router /customer/fetch-all-data [get]
+// @Router /user/fetch-all-data [get]
 func FetchAllData(c *fiber.Ctx) error {
 	var (
 		logEntryColl = database.GetCollection("logEntry")
 	)
-	filter := bson.M{"isDeleted": false}
-	// Define the sort options (descending order of updatedAt)
+
+	todayStart := time.Now().UTC().Format("2006-01-02")
+	todayEnd := todayStart + "T23:59:59Z"
+
+	filter := bson.M{
+		"isDeleted": false,
+		"createdAt": bson.M{"$gte": todayStart + "T00:00:00Z", "$lte": todayEnd},
+	}
 	sortOptions := options.Find().SetSort(bson.M{"updatedAt": -1})
 
 	// Fetch data based on filters
@@ -44,9 +51,9 @@ func FetchAllData(c *fiber.Ctx) error {
 			})
 		}
 		logEntryData = append(logEntryData, logEntry.CategoriesRes{
-			Id:        logEntryEntity.Id,
-			Type:      logEntryEntity.Type,
-			When:      logEntry.When{
+			Id:   logEntryEntity.Id,
+			Type: logEntryEntity.Type,
+			When: logEntry.When{
 				Date: logEntryEntity.When.Date,
 				Time: logEntryEntity.When.Time,
 			},
