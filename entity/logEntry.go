@@ -13,10 +13,15 @@ type LogEntryEntity struct {
 	IsDeleted   bool               `json:"isDeleted" bson:"isDeleted"`
 	Notes       string             `json:"notes" bson:"notes"`
 	Ways        []string           `json:"ways" bson:"ways"`
-	When        string             `json:"when" bson:"when"`
+	When        When               `json:"when" bson:"when"`
 	PainLevel   int32              `json:"painLevel" bson:"painlevel"`
 	WhatItIsFor string             `json:"whatItIsFor" bson:"whatItIsFor"`
 	Alert       string             `json:"alert" bson:"alert"`
 	CreatedAt   time.Time          `json:"createdAt" bson:"createdAt"`
 	UpdatedAt   time.Time          `json:"updatedAt" bson:"updatedAt"`
+}
+
+type When struct {
+	Date string `json:"date" bson:"date"`
+	Time string `json:"time" bson:"time"`
 }

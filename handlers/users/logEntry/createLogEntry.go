@@ -41,7 +41,10 @@ func CreateLogEntry(c *fiber.Ctx) error {
 		Feel:        data.Feel,
 		Notes:       data.Notes,
 		Ways:        data.Ways,
-		When:        data.When,
+		When:        entity.When{
+			Date: data.Date,
+			Time: data.Time,
+		},
 		PainLevel:   data.PainLevel,
 		WhatItIsFor: data.WhatItIsFor,
 		Alert:       data.Alert,

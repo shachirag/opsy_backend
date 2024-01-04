@@ -16,8 +16,13 @@ type CategoriesRes struct {
 	Id        primitive.ObjectID `json:"id" bson:"_id"`
 	Type      string             `json:"type" bson:"type"`
 	Feel      string             `json:"feel" bson:"feel"`
-	When      string             `json:"when" bson:"when"`
+	When      When             `json:"when" bson:"when"`
 	PainLevel int32              `json:"painLevel" bson:"painLevel"`
 	CreatedAt time.Time          `json:"createdAt" bson:"createdAt"`
 	UpdatedAt time.Time          `json:"updatedAt" bson:"updatedAt"`
+}
+
+type When struct {
+	Date string `json:"date" bson:"date"`
+	Time string `json:"time" bson:"time"`
 }
