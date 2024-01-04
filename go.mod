@@ -41,6 +41,7 @@ require (
 	github.com/go-openapi/jsonreference v0.19.6 // indirect
 	github.com/go-openapi/spec v0.20.4 // indirect
 	github.com/go-openapi/swag v0.19.15 // indirect
+	github.com/gofiber/jwt/v3 v3.3.10
 	github.com/golang/snappy v0.0.1 // indirect
 	github.com/google/uuid v1.4.0 // indirect
 	github.com/jmespath/go-jmespath v0.4.0 // indirect
