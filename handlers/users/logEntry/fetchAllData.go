@@ -4,7 +4,7 @@ import (
 	"opsy_backend/database"
 	logEntry "opsy_backend/dto/users/logEntry"
 	"opsy_backend/entity"
-	"time"
+	// "time"
 
 	"github.com/gofiber/fiber/v2"
 	"go.mongodb.org/mongo-driver/bson"
@@ -21,12 +21,12 @@ func FetchAllData(c *fiber.Ctx) error {
 	var (
 		logEntryColl = database.GetCollection("logEntry")
 	)
-	todayStart := time.Now().UTC().Format("2006-01-02")
-	todayEnd := todayStart + "T23:59:59Z"
+	// todayStart := time.Now().UTC().Format("2006-01-02")
+	// todayEnd := todayStart + "T23:59:59Z"
 
 	filter := bson.M{
 		"isDeleted": false,
-		"createdAt": bson.M{"$gte": todayStart + "T00:00:00Z", "$lte": todayEnd},
+		// "createdAt": bson.M{"$gte": todayStart + "T00:00:00Z", "$lte": todayEnd},
 	}
 	// Define the sort options (descending order of updatedAt)
 	sortOptions := options.Find().SetSort(bson.M{"updatedAt": -1})
