@@ -40,4 +40,5 @@ func UsersSetupsRoutes(app *fiber.App) {
 	//log Entries
 	user.Post("/create-log-entry", jwt, logEntry.CreateLogEntry)
 	user.Get("/fetch-all-data", jwt, logEntry.FetchAllData)
+	user.Get("/months", jwt, logEntry.Months)
 }

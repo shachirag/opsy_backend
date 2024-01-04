@@ -71,12 +71,16 @@ func FetchAllData(c *fiber.Ctx) error {
         logEntryData = append(logEntryData, logEntry.CategoriesRes{
             Id:   logEntryEntity.Id,
             Type: logEntryEntity.Type,
+			Notes: logEntryEntity.Notes,
+			Ways: logEntryEntity.Ways,
             When: logEntry.When{
                 Date: logEntryEntity.When.Date,
                 Time: logEntryEntity.When.Time,
             },
             PainLevel: logEntryEntity.PainLevel,
+			WhatItIsFor: logEntryEntity.WhatItIsFor,
             Feel:      logEntryEntity.Feel,
+			Alert: logEntryEntity.Alert,
             CreatedAt: logEntryEntity.CreatedAt,
             UpdatedAt: logEntryEntity.UpdatedAt,
         })
