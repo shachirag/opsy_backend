@@ -16,7 +16,7 @@ import (
 // @Description fetch all requied data
 // @Produce json
 // @Success 200 {object} logEntry.CatgoriesResDto
-// @Router /customer/fetch-all-data [get]
+// @Router /user/fetch-all-data [get]
 func FetchAllData(c *fiber.Ctx) error {
 	var (
 		logEntryColl = database.GetCollection("logEntry")

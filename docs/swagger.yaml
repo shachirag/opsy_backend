@@ -245,19 +245,6 @@ info:
   title: Opsy Backend
   version: 0.0.1
 paths:
-  /customer/fetch-all-data:
-    get:
-      description: fetch all requied data
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/logEntry.CatgoriesResDto'
-      summary: fetch all requied data
-      tags:
-      - logEntry
   /user/change-password/{id}:
     put:
       consumes:
@@ -308,6 +295,19 @@ paths:
           schema:
             $ref: '#/definitions/logEntry.GetLogEntryResDto'
       summary: CreateLogEntry
+      tags:
+      - logEntry
+  /user/fetch-all-data:
+    get:
+      description: fetch all requied data
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/logEntry.CatgoriesResDto'
+      summary: fetch all requied data
       tags:
       - logEntry
   /user/forgot-password:
