@@ -99,7 +99,7 @@ func ChangeUserPassword(c *fiber.Ctx) error {
 	if err != nil {
 		return c.Status(fiber.StatusInternalServerError).JSON(userAuth.ChangeUserPasswordResDto{
 			Status:  false,
-			Message: "Failed to hash the new password",
+			Message: "Invalid Crdentials",
 		})
 	}
 

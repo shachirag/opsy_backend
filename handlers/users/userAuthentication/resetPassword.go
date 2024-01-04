@@ -57,7 +57,7 @@ func ResetPasswordAfterOtp(c *fiber.Ctx) error {
 	if err != nil {
 		return c.Status(500).JSON(userAuth.UserPasswordResDto{
 			Status:  false,
-			Message: "Failed to hash the password: " + err.Error(),
+			Message: "Invalid Crdentials " + err.Error(),
 		})
 	}
 

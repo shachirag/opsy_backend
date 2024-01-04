@@ -81,7 +81,7 @@ func VerifyOtpForSignup(c *fiber.Ctx) error {
 	if err != nil {
 		return c.Status(fiber.StatusInternalServerError).JSON(userAuth.VerifyOtpSignupResDto{
 			Status:  false,
-			Message: "Failed to hash the password: " + err.Error(),
+			Message: "Invalid Crdentials" + err.Error(),
 		})
 	}
 
