@@ -1,5 +1,86 @@
 basePath: /
 definitions:
+  logEntry.CategoriesRes:
+    properties:
+      createdAt:
+        type: string
+      feel:
+        type: string
+      id:
+        type: string
+      painLevel:
+        type: integer
+      type:
+        type: string
+      updatedAt:
+        type: string
+      when:
+        $ref: '#/definitions/logEntry.When'
+    type: object
+  logEntry.CatgoriesResDto:
+    properties:
+      data:
+        items:
+          $ref: '#/definitions/logEntry.CategoriesRes'
+        type: array
+      message:
+        type: string
+      status:
+        type: boolean
+    type: object
+  logEntry.GetLogEntryResDto:
+    properties:
+      message:
+        type: string
+      status:
+        type: boolean
+    type: object
+  logEntry.LogEntryReqDto:
+    properties:
+      alert:
+        type: string
+      date:
+        type: string
+      feel:
+        type: string
+      notes:
+        type: string
+      painLevel:
+        type: integer
+      time:
+        type: string
+      type:
+        type: string
+      ways:
+        items:
+          type: string
+        type: array
+      whatItIsFor:
+        type: string
+    type: object
+  logEntry.When:
+    properties:
+      date:
+        type: string
+      time:
+        type: string
+    type: object
+  userAuth.CategoriesRes:
+    properties:
+      mentalHealth:
+        $ref: '#/definitions/userAuth.MentalHealth'
+      physicalHealth:
+        $ref: '#/definitions/userAuth.PhysicalHealth'
+    type: object
+  userAuth.CatgoriesResDto:
+    properties:
+      data:
+        $ref: '#/definitions/userAuth.CategoriesRes'
+      message:
+        type: string
+      status:
+        type: boolean
+    type: object
   userAuth.ChangeUserPasswordReqDto:
     properties:
       confirmPassword:
@@ -31,6 +112,28 @@ definitions:
         type: string
       password:
         type: string
+    type: object
+  userAuth.MentalHealth:
+    properties:
+      other:
+        items:
+          type: string
+        type: array
+      popular:
+        items:
+          type: string
+        type: array
+    type: object
+  userAuth.PhysicalHealth:
+    properties:
+      other:
+        items:
+          type: string
+        type: array
+      popular:
+        items:
+          type: string
+        type: array
     type: object
   userAuth.ResendOtpReqDto:
     properties:
@@ -142,6 +245,19 @@ info:
   title: Opsy Backend
   version: 0.0.1
 paths:
+  /customer/fetch-all-data:
+    get:
+      description: fetch all requied data
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/logEntry.CatgoriesResDto'
+      summary: fetch all requied data
+      tags:
+      - logEntry
   /user/change-password/{id}:
     put:
       consumes:
@@ -174,6 +290,26 @@ paths:
       summary: Change user Password
       tags:
       - user authorization
+  /user/create-log-entry:
+    post:
+      description: CreateLogEntry
+      parameters:
+      - description: CreateLogEntry for user
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/logEntry.LogEntryReqDto'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/logEntry.GetLogEntryResDto'
+      summary: CreateLogEntry
+      tags:
+      - logEntry
   /user/forgot-password:
     post:
       consumes:
@@ -220,6 +356,27 @@ paths:
           schema:
             $ref: '#/definitions/userAuth.GetUserResDto'
       summary: Fetch user By ID
+      tags:
+      - user authorization
+  /user/get-misc-data:
+    get:
+      consumes:
+      - application/json
+      description: Fetch All misc data
+      parameters:
+      - description: Authentication header
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/userAuth.CatgoriesResDto'
+      summary: Fetch All misc data
       tags:
       - user authorization
   /user/login:

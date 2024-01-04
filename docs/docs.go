@@ -20,6 +20,26 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
+        "/customer/fetch-all-data": {
+            "get": {
+                "description": "fetch all requied data",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "logEntry"
+                ],
+                "summary": "fetch all requied data",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/logEntry.CatgoriesResDto"
+                        }
+                    }
+                }
+            }
+        },
         "/user/change-password/{id}": {
             "put": {
                 "description": "change admin Password",
@@ -63,6 +83,37 @@ const docTemplate = `{
                         "description": "OK",
                         "schema": {
                             "$ref": "#/definitions/userAuth.ChangeUserPasswordResDto"
+                        }
+                    }
+                }
+            }
+        },
+        "/user/create-log-entry": {
+            "post": {
+                "description": "CreateLogEntry",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "logEntry"
+                ],
+                "summary": "CreateLogEntry",
+                "parameters": [
+                    {
+                        "description": "CreateLogEntry for user",
+                        "name": "user",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/logEntry.LogEntryReqDto"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/logEntry.GetLogEntryResDto"
                         }
                     }
                 }
@@ -136,6 +187,38 @@ const docTemplate = `{
                         "description": "OK",
                         "schema": {
                             "$ref": "#/definitions/userAuth.GetUserResDto"
+                        }
+                    }
+                }
+            }
+        },
+        "/user/get-misc-data": {
+            "get": {
+                "description": "Fetch All misc data",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "user authorization"
+                ],
+                "summary": "Fetch All misc data",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Authentication header",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/userAuth.CatgoriesResDto"
                         }
                     }
                 }
@@ -381,6 +464,131 @@ const docTemplate = `{
         }
     },
     "definitions": {
+        "logEntry.CategoriesRes": {
+            "type": "object",
+            "properties": {
+                "createdAt": {
+                    "type": "string"
+                },
+                "feel": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "painLevel": {
+                    "type": "integer"
+                },
+                "type": {
+                    "type": "string"
+                },
+                "updatedAt": {
+                    "type": "string"
+                },
+                "when": {
+                    "$ref": "#/definitions/logEntry.When"
+                }
+            }
+        },
+        "logEntry.CatgoriesResDto": {
+            "type": "object",
+            "properties": {
+                "data": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/logEntry.CategoriesRes"
+                    }
+                },
+                "message": {
+                    "type": "string"
+                },
+                "status": {
+                    "type": "boolean"
+                }
+            }
+        },
+        "logEntry.GetLogEntryResDto": {
+            "type": "object",
+            "properties": {
+                "message": {
+                    "type": "string"
+                },
+                "status": {
+                    "type": "boolean"
+                }
+            }
+        },
+        "logEntry.LogEntryReqDto": {
+            "type": "object",
+            "properties": {
+                "alert": {
+                    "type": "string"
+                },
+                "date": {
+                    "type": "string"
+                },
+                "feel": {
+                    "type": "string"
+                },
+                "notes": {
+                    "type": "string"
+                },
+                "painLevel": {
+                    "type": "integer"
+                },
+                "time": {
+                    "type": "string"
+                },
+                "type": {
+                    "type": "string"
+                },
+                "ways": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "whatItIsFor": {
+                    "type": "string"
+                }
+            }
+        },
+        "logEntry.When": {
+            "type": "object",
+            "properties": {
+                "date": {
+                    "type": "string"
+                },
+                "time": {
+                    "type": "string"
+                }
+            }
+        },
+        "userAuth.CategoriesRes": {
+            "type": "object",
+            "properties": {
+                "mentalHealth": {
+                    "$ref": "#/definitions/userAuth.MentalHealth"
+                },
+                "physicalHealth": {
+                    "$ref": "#/definitions/userAuth.PhysicalHealth"
+                }
+            }
+        },
+        "userAuth.CatgoriesResDto": {
+            "type": "object",
+            "properties": {
+                "data": {
+                    "$ref": "#/definitions/userAuth.CategoriesRes"
+                },
+                "message": {
+                    "type": "string"
+                },
+                "status": {
+                    "type": "boolean"
+                }
+            }
+        },
         "userAuth.ChangeUserPasswordReqDto": {
             "type": "object",
             "properties": {
@@ -428,6 +636,40 @@ const docTemplate = `{
                 },
                 "password": {
                     "type": "string"
+                }
+            }
+        },
+        "userAuth.MentalHealth": {
+            "type": "object",
+            "properties": {
+                "other": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "popular": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                }
+            }
+        },
+        "userAuth.PhysicalHealth": {
+            "type": "object",
+            "properties": {
+                "other": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "popular": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
                 }
             }
         },
