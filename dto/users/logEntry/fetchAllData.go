@@ -18,7 +18,7 @@ type CategoriesRes struct {
 	Feel        string             `json:"feel" bson:"feel"`
 	Notes       string             `json:"notes" bson:"notes"`
 	Ways        []string           `json:"ways" bson:"ways"`
-	When        When               `json:"when" bson:"when"`
+	When        time.Time          `json:"when" bson:"when"`
 	PainLevel   int32              `json:"painLevel" bson:"painLevel"`
 	WhatItIsFor string             `json:"whatItIsFor" bson:"whatItIsFor"`
 	Alert       string             `json:"alert" bson:"alert"`
@@ -26,7 +26,7 @@ type CategoriesRes struct {
 	UpdatedAt   time.Time          `json:"updatedAt" bson:"updatedAt"`
 }
 
-type When struct {
-	Date string `json:"date" bson:"date"`
-	Time string `json:"time" bson:"time"`
-}
+// type When struct {
+// 	Date string `json:"date" bson:"date"`
+// 	Time string `json:"time" bson:"time"`
+// }
