@@ -25,19 +25,26 @@ func InsightWeeks(c *fiber.Ctx) error {
 	)
 	weekStartDate := c.Query("firstDate")
 	weekEndDate := c.Query("endDate")
-	_, err := time.Parse("2024-01-01",weekStartDate+"-"+ weekEndDate+"-07")
-	if err != nil {
-		return c.Status(fiber.StatusBadRequest).JSON(logEntry.InsightResDto{
-			Status:  false,
-			Message: "Invalid date format: " + err.Error(),
-		})
-	}
-
+	startDate, err := time.Parse("2006-01-02", weekStartDate)
+    if err != nil {
+        return c.Status(fiber.StatusBadRequest).JSON(logEntry.InsightResDto{
+            Status:  false,
+            Message: "Invalid startDate format: " + err.Error(),
+        })
+    }
+    endDate, err := time.Parse("2006-01-02", weekEndDate)
+    if err != nil {
+        return c.Status(fiber.StatusBadRequest).JSON(logEntry.InsightResDto{
+            Status:  false,
+            Message: "Invalid endDate format: " + err.Error(),
+        })
+    }
+	endOfDay := endDate.Add(24 * time.Hour)
 	// Adjust the format of todayStart to match the createdAt format in MongoDB
 
 	filter := bson.M{
 		"isDeleted": false,
-		"when": bson.M{"$gte": weekStartDate, "$lte": weekEndDate},
+		"when": bson.M{"$gte": startDate, "$lte": endOfDay },
 	}
 	sortOptions := options.Find().SetSort(bson.M{"updatedAt": -1})
 	// Fetch data based on filters

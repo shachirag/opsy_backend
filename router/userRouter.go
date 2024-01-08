@@ -42,6 +42,6 @@ func UsersSetupsRoutes(app *fiber.App) {
 	user.Get("/fetch-all-data", jwt, logEntry.FetchAllData)
 	user.Get("/months", jwt, logEntry.Months)
 	user.Get("/insight-weeks", jwt, logEntry.InsightWeeks)
-	// user.Get("/insight-months", jwt, logEntry.InsightMonths)
+	user.Get("/insight-months", jwt, logEntry.InsightMonths)
 	// user.Get("/insight-year", jwt, logEntry.InsightWeeks)
 }
