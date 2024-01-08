@@ -60,7 +60,7 @@ func LoginUser(c *fiber.Ctx) error {
 	if err != nil {
 		return c.Status(500).JSON(userAuth.LoginResDto{
 			Status:  false,
-			Message: "invalid credentials" + err.Error(),
+			Message: "invalid credentials",
 		})
 	}
 

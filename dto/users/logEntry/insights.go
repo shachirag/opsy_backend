@@ -1,24 +1,29 @@
 package logEntry
 
-import (
-	"time"
-
-	"go.mongodb.org/mongo-driver/bson/primitive"
-)
-
 type InsightResDto struct {
-	Status  bool            `json:"status"`
-	Message string          `json:"message"`
+	Status  bool         `json:"status"`
+	Message string       `json:"message"`
 	Data    []InsightRes `json:"data"`
 }
 
 type InsightRes struct {
-	Id          primitive.ObjectID `json:"id" bson:"_id"`
-	Type        string             `json:"type" bson:"type"`
-	Feel        string             `json:"feel" bson:"feel"`
-	Ways        []string           `json:"ways" bson:"ways"`
-	When        time.Time          `json:"when" bson:"when"`
-	PainLevel   int32              `json:"painLevel" bson:"painLevel"`
-	CreatedAt   time.Time          `json:"createdAt" bson:"createdAt"`
-	UpdatedAt   time.Time          `json:"updatedAt" bson:"updatedAt"`
+	Date         string   `json:"date" bson:"date"`
+	Day          string   `json:"day" bson:"day"`
+	AvgPainLevel *float64 `json:"avgPainLevel" bson:"avgPainLevel"`
 }
+
+
+type MentalHealthInsightResDto struct {
+    Status  bool                    `json:"status"`
+    Message string                  `json:"message"`
+    Data    []MentalHealthInsightRes `json:"data"`
+}
+ 
+type MentalHealthInsightRes struct {
+    Date    string  `json:"date" bson:"date"`
+    Day     string  `json:"day" bson:"day"`
+    AvgFeel float64 `json:"avgFeel" bson:"avgFeel"`
+}
+
+
+

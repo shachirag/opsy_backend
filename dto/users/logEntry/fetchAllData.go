@@ -26,7 +26,4 @@ type CategoriesRes struct {
 	UpdatedAt   time.Time          `json:"updatedAt" bson:"updatedAt"`
 }
 
-// type When struct {
-// 	Date string `json:"date" bson:"date"`
-// 	Time string `json:"time" bson:"time"`
-// }
+

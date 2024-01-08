@@ -35,24 +35,13 @@ func CreateLogEntry(c *fiber.Ctx) error {
         })
     }
    
-    parsedDate, err := time.Parse("2006-01-02", data.Date)
+    dateTime, err := time.Parse("2006-01-02T15:04:05", data.DateTime)
     if err != nil {
         return c.Status(500).JSON(logEntry.GetLogEntryResDto{
             Status:  false,
             Message: err.Error(),
         })
     }
- 
-    parsedTime, err := time.Parse("15:04", data.Time)
-    if err != nil {
-        return c.Status(500).JSON(logEntry.GetLogEntryResDto{
-            Status:  false,
-            Message: err.Error(),
-        })
-    }
- 
-    mergedDateTime := time.Date(parsedDate.Year(), parsedDate.Month(), parsedDate.Day(),
-        parsedTime.Hour(), parsedTime.Minute(), 0, 0, time.UTC)
  
     logEntryData := entity.LogEntryEntity{
         Id:          primitive.NewObjectID(),
@@ -61,7 +50,7 @@ func CreateLogEntry(c *fiber.Ctx) error {
         Feel:        data.Feel,
         Notes:       data.Notes,
         Ways:        data.Ways,
-        When:        mergedDateTime,
+        When:        dateTime,
         PainLevel:   data.PainLevel,
         WhatItIsFor: data.WhatItIsFor,
         Alert:       data.Alert,
