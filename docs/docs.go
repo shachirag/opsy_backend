@@ -358,6 +358,38 @@ const docTemplate = `{
                 "responses": {}
             }
         },
+        "/user/monthly-insights": {
+            "get": {
+                "description": "Retrieves mental health and physical health data for a specified month",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "logEntry"
+                ],
+                "summary": "Fetch monthly insights data",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Month and Year (YYYY-MM)",
+                        "name": "monthYear",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/logEntry.InsightsResDto"
+                        }
+                    }
+                }
+            }
+        },
         "/user/months": {
             "get": {
                 "description": "Fetch log entry data for a specific month and year.",
@@ -730,6 +762,9 @@ const docTemplate = `{
         "logEntry.GetLogEntryResDto": {
             "type": "object",
             "properties": {
+                "id": {
+                    "type": "string"
+                },
                 "message": {
                     "type": "string"
                 },

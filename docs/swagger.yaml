@@ -47,6 +47,8 @@ definitions:
     type: object
   logEntry.GetLogEntryResDto:
     properties:
+      id:
+        type: string
       message:
         type: string
       status:
@@ -551,6 +553,28 @@ paths:
       summary: Login User
       tags:
       - user authorization
+  /user/monthly-insights:
+    get:
+      consumes:
+      - application/json
+      description: Retrieves mental health and physical health data for a specified
+        month
+      parameters:
+      - description: Month and Year (YYYY-MM)
+        in: query
+        name: monthYear
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/logEntry.InsightsResDto'
+      summary: Fetch monthly insights data
+      tags:
+      - logEntry
   /user/months:
     get:
       description: Fetch log entry data for a specific month and year.

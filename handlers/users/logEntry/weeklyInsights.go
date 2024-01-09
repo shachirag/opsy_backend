@@ -55,7 +55,6 @@ var mapFeel = map[string]int{
 	"Excelling":  -5,
 }
 
-// MentalHealthInsightWeeksData fetches mental health data and calculates average feelings
 func MentalHealthInsightWeeksData(c *fiber.Ctx) ([]logEntry.MentalHealthRes, error) {
 	var (
 		logEntryColl = database.GetCollection("logEntry")
@@ -153,7 +152,6 @@ func MentalHealthInsightWeeksData(c *fiber.Ctx) ([]logEntry.MentalHealthRes, err
 	return responseData, nil
 }
 
-// PhysicalHealthInsightWeeksData fetches physical health data and calculates average pain level
 func PhysicalHealthInsightWeeksData(c *fiber.Ctx) ([]logEntry.PhysicalHealthRes, error) {
 	var (
 		logEntryColl = database.GetCollection("logEntry")
