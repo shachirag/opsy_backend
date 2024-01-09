@@ -12,13 +12,17 @@ import (
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
-// @Summary fetch all required data
+// Months fetches log entry data for a specific month and year.
+// @Summary Fetch log entry data for a specific month and year.
 // @Tags logEntry
-// @Description fetch all required data
+// @Description Fetch log entry data for a specific month and year.
 // @Produce json
-// @Param date query string true "date (YYYY-MM-DD)"
-// @Success 200 {object} logEntry.CatgoriesResDto
-// @Router /user/fetch-all-data [get]
+// @Param month query string true "Month (01-12)"
+// @Param year query string true "Year (YYYY)"
+// @Success 200 {object} logEntry.CatgoriesResDto "Successfully fetched log entry data"
+// @Failure 400 {object} logEntry.CatgoriesResDto "Invalid date format or missing parameters"
+// @Failure 500 {object} logEntry.CatgoriesResDto "Failed to fetch or process data"
+// @Router /user/months [get]
 func Months(c *fiber.Ctx) error {
 	var (
 		logEntryColl = database.GetCollection("logEntry")

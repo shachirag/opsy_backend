@@ -99,16 +99,84 @@ const docTemplate = `{
                 }
             }
         },
-        "/user/fetch-all-data": {
-            "get": {
-                "description": "fetch all requied data",
+        "/user/edit-appointment/{id}": {
+            "put": {
+                "description": "Update appointment",
+                "consumes": [
+                    "multipart/form-data"
+                ],
                 "produces": [
                     "application/json"
                 ],
                 "tags": [
                     "logEntry"
                 ],
-                "summary": "fetch all requied data",
+                "summary": "Update appointment",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Authentication header",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "appointment ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "name": "alert",
+                        "in": "formData"
+                    },
+                    {
+                        "type": "string",
+                        "name": "notes",
+                        "in": "formData"
+                    },
+                    {
+                        "type": "string",
+                        "name": "whatItIsFor",
+                        "in": "formData"
+                    },
+                    {
+                        "type": "string",
+                        "name": "when",
+                        "in": "formData"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/logEntry.GetAppointmentResDto"
+                        }
+                    }
+                }
+            }
+        },
+        "/user/fetch-all-data": {
+            "get": {
+                "description": "fetch all required data",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "logEntry"
+                ],
+                "summary": "fetch all required data",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "date (YYYY-MM-DD)",
+                        "name": "date",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -224,6 +292,45 @@ const docTemplate = `{
                 }
             }
         },
+        "/user/logentry-info/{id}": {
+            "get": {
+                "description": "Fetch logentry By ID",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "logEntry"
+                ],
+                "summary": "Fetch logentry By ID",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Authentication header",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "logentry ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/logEntry.LogentryResDto"
+                        }
+                    }
+                }
+            }
+        },
         "/user/login": {
             "post": {
                 "description": "Login User",
@@ -249,6 +356,54 @@ const docTemplate = `{
                     }
                 ],
                 "responses": {}
+            }
+        },
+        "/user/months": {
+            "get": {
+                "description": "Fetch log entry data for a specific month and year.",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "logEntry"
+                ],
+                "summary": "Fetch log entry data for a specific month and year.",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Month (01-12)",
+                        "name": "month",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Year (YYYY)",
+                        "name": "year",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successfully fetched log entry data",
+                        "schema": {
+                            "$ref": "#/definitions/logEntry.CatgoriesResDto"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid date format or missing parameters",
+                        "schema": {
+                            "$ref": "#/definitions/logEntry.CatgoriesResDto"
+                        }
+                    },
+                    "500": {
+                        "description": "Failed to fetch or process data",
+                        "schema": {
+                            "$ref": "#/definitions/logEntry.CatgoriesResDto"
+                        }
+                    }
+                }
             }
         },
         "/user/resend-otp": {
@@ -461,12 +616,54 @@ const docTemplate = `{
                     }
                 }
             }
+        },
+        "/user/weekly-insights": {
+            "get": {
+                "description": "Retrieves mental health and physical health data for a specified week",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "logEntry"
+                ],
+                "summary": "Fetch weekly insights data",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Start date of the week (YYYY-MM-DD)",
+                        "name": "firstDate",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "End date of the week (YYYY-MM-DD)",
+                        "name": "endDate",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/logEntry.InsightsResDto"
+                        }
+                    }
+                }
+            }
         }
     },
     "definitions": {
         "logEntry.CategoriesRes": {
             "type": "object",
             "properties": {
+                "alert": {
+                    "type": "string"
+                },
                 "createdAt": {
                     "type": "string"
                 },
@@ -474,6 +671,9 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "id": {
+                    "type": "string"
+                },
+                "notes": {
                     "type": "string"
                 },
                 "painLevel": {
@@ -485,8 +685,17 @@ const docTemplate = `{
                 "updatedAt": {
                     "type": "string"
                 },
+                "ways": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "whatItIsFor": {
+                    "type": "string"
+                },
                 "when": {
-                    "$ref": "#/definitions/logEntry.When"
+                    "type": "string"
                 }
             }
         },
@@ -507,9 +716,51 @@ const docTemplate = `{
                 }
             }
         },
+        "logEntry.GetAppointmentResDto": {
+            "type": "object",
+            "properties": {
+                "message": {
+                    "type": "string"
+                },
+                "status": {
+                    "type": "boolean"
+                }
+            }
+        },
         "logEntry.GetLogEntryResDto": {
             "type": "object",
             "properties": {
+                "message": {
+                    "type": "string"
+                },
+                "status": {
+                    "type": "boolean"
+                }
+            }
+        },
+        "logEntry.InsightsData": {
+            "type": "object",
+            "properties": {
+                "mentalHealth": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/logEntry.MentalHealthRes"
+                    }
+                },
+                "physicalHealth": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/logEntry.PhysicalHealthRes"
+                    }
+                }
+            }
+        },
+        "logEntry.InsightsResDto": {
+            "type": "object",
+            "properties": {
+                "data": {
+                    "$ref": "#/definitions/logEntry.InsightsData"
+                },
                 "message": {
                     "type": "string"
                 },
@@ -524,7 +775,7 @@ const docTemplate = `{
                 "alert": {
                     "type": "string"
                 },
-                "date": {
+                "dateTime": {
                     "type": "string"
                 },
                 "feel": {
@@ -535,9 +786,6 @@ const docTemplate = `{
                 },
                 "painLevel": {
                     "type": "integer"
-                },
-                "time": {
-                    "type": "string"
                 },
                 "type": {
                     "type": "string"
@@ -553,13 +801,88 @@ const docTemplate = `{
                 }
             }
         },
-        "logEntry.When": {
+        "logEntry.LogentryRes": {
             "type": "object",
             "properties": {
+                "alert": {
+                    "type": "string"
+                },
+                "createdAt": {
+                    "type": "string"
+                },
+                "feel": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "isDeleted": {
+                    "type": "boolean"
+                },
+                "notes": {
+                    "type": "string"
+                },
+                "painLevel": {
+                    "type": "integer"
+                },
+                "type": {
+                    "type": "string"
+                },
+                "updatedAt": {
+                    "type": "string"
+                },
+                "ways": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "whatItIsFor": {
+                    "type": "string"
+                },
+                "when": {
+                    "type": "string"
+                }
+            }
+        },
+        "logEntry.LogentryResDto": {
+            "type": "object",
+            "properties": {
+                "data": {
+                    "$ref": "#/definitions/logEntry.LogentryRes"
+                },
+                "message": {
+                    "type": "string"
+                },
+                "status": {
+                    "type": "boolean"
+                }
+            }
+        },
+        "logEntry.MentalHealthRes": {
+            "type": "object",
+            "properties": {
+                "avgFeel": {
+                    "type": "number"
+                },
                 "date": {
                     "type": "string"
                 },
-                "time": {
+                "day": {
+                    "type": "string"
+                }
+            }
+        },
+        "logEntry.PhysicalHealthRes": {
+            "type": "object",
+            "properties": {
+                "avgPainLevel": {
+                    "type": "number"
+                },
+                "date": {
+                    "type": "string"
+                },
+                "day": {
                     "type": "string"
                 }
             }

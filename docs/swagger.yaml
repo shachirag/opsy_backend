@@ -2,11 +2,15 @@ basePath: /
 definitions:
   logEntry.CategoriesRes:
     properties:
+      alert:
+        type: string
       createdAt:
         type: string
       feel:
         type: string
       id:
+        type: string
+      notes:
         type: string
       painLevel:
         type: integer
@@ -14,8 +18,14 @@ definitions:
         type: string
       updatedAt:
         type: string
+      ways:
+        items:
+          type: string
+        type: array
+      whatItIsFor:
+        type: string
       when:
-        $ref: '#/definitions/logEntry.When'
+        type: string
     type: object
   logEntry.CatgoriesResDto:
     properties:
@@ -28,8 +38,35 @@ definitions:
       status:
         type: boolean
     type: object
+  logEntry.GetAppointmentResDto:
+    properties:
+      message:
+        type: string
+      status:
+        type: boolean
+    type: object
   logEntry.GetLogEntryResDto:
     properties:
+      message:
+        type: string
+      status:
+        type: boolean
+    type: object
+  logEntry.InsightsData:
+    properties:
+      mentalHealth:
+        items:
+          $ref: '#/definitions/logEntry.MentalHealthRes'
+        type: array
+      physicalHealth:
+        items:
+          $ref: '#/definitions/logEntry.PhysicalHealthRes'
+        type: array
+    type: object
+  logEntry.InsightsResDto:
+    properties:
+      data:
+        $ref: '#/definitions/logEntry.InsightsData'
       message:
         type: string
       status:
@@ -39,7 +76,7 @@ definitions:
     properties:
       alert:
         type: string
-      date:
+      dateTime:
         type: string
       feel:
         type: string
@@ -47,8 +84,6 @@ definitions:
         type: string
       painLevel:
         type: integer
-      time:
-        type: string
       type:
         type: string
       ways:
@@ -58,11 +93,60 @@ definitions:
       whatItIsFor:
         type: string
     type: object
-  logEntry.When:
+  logEntry.LogentryRes:
     properties:
+      alert:
+        type: string
+      createdAt:
+        type: string
+      feel:
+        type: string
+      id:
+        type: string
+      isDeleted:
+        type: boolean
+      notes:
+        type: string
+      painLevel:
+        type: integer
+      type:
+        type: string
+      updatedAt:
+        type: string
+      ways:
+        items:
+          type: string
+        type: array
+      whatItIsFor:
+        type: string
+      when:
+        type: string
+    type: object
+  logEntry.LogentryResDto:
+    properties:
+      data:
+        $ref: '#/definitions/logEntry.LogentryRes'
+      message:
+        type: string
+      status:
+        type: boolean
+    type: object
+  logEntry.MentalHealthRes:
+    properties:
+      avgFeel:
+        type: number
       date:
         type: string
-      time:
+      day:
+        type: string
+    type: object
+  logEntry.PhysicalHealthRes:
+    properties:
+      avgPainLevel:
+        type: number
+      date:
+        type: string
+      day:
         type: string
     type: object
   userAuth.CategoriesRes:
@@ -297,9 +381,53 @@ paths:
       summary: CreateLogEntry
       tags:
       - logEntry
+  /user/edit-appointment/{id}:
+    put:
+      consumes:
+      - multipart/form-data
+      description: Update appointment
+      parameters:
+      - description: Authentication header
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: appointment ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - in: formData
+        name: alert
+        type: string
+      - in: formData
+        name: notes
+        type: string
+      - in: formData
+        name: whatItIsFor
+        type: string
+      - in: formData
+        name: when
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/logEntry.GetAppointmentResDto'
+      summary: Update appointment
+      tags:
+      - logEntry
   /user/fetch-all-data:
     get:
-      description: fetch all requied data
+      description: fetch all required data
+      parameters:
+      - description: date (YYYY-MM-DD)
+        in: query
+        name: date
+        required: true
+        type: string
       produces:
       - application/json
       responses:
@@ -307,7 +435,7 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/logEntry.CatgoriesResDto'
-      summary: fetch all requied data
+      summary: fetch all required data
       tags:
       - logEntry
   /user/forgot-password:
@@ -379,6 +507,32 @@ paths:
       summary: Fetch All misc data
       tags:
       - user authorization
+  /user/logentry-info/{id}:
+    get:
+      consumes:
+      - application/json
+      description: Fetch logentry By ID
+      parameters:
+      - description: Authentication header
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: logentry ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/logEntry.LogentryResDto'
+      summary: Fetch logentry By ID
+      tags:
+      - logEntry
   /user/login:
     post:
       consumes:
@@ -397,6 +551,38 @@ paths:
       summary: Login User
       tags:
       - user authorization
+  /user/months:
+    get:
+      description: Fetch log entry data for a specific month and year.
+      parameters:
+      - description: Month (01-12)
+        in: query
+        name: month
+        required: true
+        type: string
+      - description: Year (YYYY)
+        in: query
+        name: year
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Successfully fetched log entry data
+          schema:
+            $ref: '#/definitions/logEntry.CatgoriesResDto'
+        "400":
+          description: Invalid date format or missing parameters
+          schema:
+            $ref: '#/definitions/logEntry.CatgoriesResDto'
+        "500":
+          description: Failed to fetch or process data
+          schema:
+            $ref: '#/definitions/logEntry.CatgoriesResDto'
+      summary: Fetch log entry data for a specific month and year.
+      tags:
+      - logEntry
   /user/resend-otp:
     post:
       consumes:
@@ -535,4 +721,31 @@ paths:
       summary: Verify OTP for signup
       tags:
       - user authorization
+  /user/weekly-insights:
+    get:
+      consumes:
+      - application/json
+      description: Retrieves mental health and physical health data for a specified
+        week
+      parameters:
+      - description: Start date of the week (YYYY-MM-DD)
+        in: query
+        name: firstDate
+        required: true
+        type: string
+      - description: End date of the week (YYYY-MM-DD)
+        in: query
+        name: endDate
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/logEntry.InsightsResDto'
+      summary: Fetch weekly insights data
+      tags:
+      - logEntry
 swagger: "2.0"
