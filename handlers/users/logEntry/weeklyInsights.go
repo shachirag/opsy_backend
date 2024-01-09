@@ -114,12 +114,7 @@ func MentalHealthInsightWeeksData(c *fiber.Ctx) ([]logEntry.MentalHealthRes, err
 		dayIndex := int(entry.When.Weekday())
 		avg := dayData[dayIndex].AvgFeel
 
-		if avg == 0 {
-			dayData[dayIndex].AvgFeel = float64(mapFeel[entry.Feel])
-		} else {
-			dayData[dayIndex].AvgFeel = (avg*float64(dayCount[dayIndex]) + float64(mapFeel[entry.Feel])) / float64(dayCount[dayIndex]+1)
-		}
-
+		dayData[dayIndex].AvgFeel = (avg*float64(dayCount[dayIndex]) + float64(mapFeel[entry.Feel])) / float64(dayCount[dayIndex]+1)
 		dayData[dayIndex].Day = entry.When.Weekday().String()[:3]
 		dayCount[dayIndex]++
 	}
