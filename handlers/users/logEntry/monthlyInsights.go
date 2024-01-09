@@ -20,19 +20,68 @@ import (
 // @Tags logEntry
 // @Accept json
 // @Produce json
-// @Param monthYear query string true "Month and Year (YYYY-MM)"
+// @Param monthYear query string true "Month and Year (MM-YYYY)"
 // @Success 200 {object} logEntry.InsightsResDto
 // @Router /user/monthly-insights [get]
 func MonthlyInsights(c *fiber.Ctx) error {
-	mentalHealthData, err := MentalHealthInsightMonthsData(c)
+
+	monthYear := c.Query("monthYear")
+	parsedMonthYear, err := time.Parse("01-2006", monthYear)
+	if err != nil {
+		return fmt.Errorf("Invalid monthYear format: %s", err.Error())
+	}
+
+	startDate := time.Date(parsedMonthYear.Year(), parsedMonthYear.Month(), 1, 0, 0, 0, 0, time.UTC)
+	endDate := startDate.AddDate(0, 1, 0).Add(-time.Nanosecond)
+
+	mentalHealthData, err := MentalHealthInsightMonthsData(c, startDate, endDate)
 	if err != nil {
 		return err
 	}
 
-	physicalHealthData, err := PhysicalHealthInsightMonthsData(c)
+	physicalHealthData, err := PhysicalHealthInsightMonthsData(c, startDate, endDate)
 	if err != nil {
 		return err
 	}
+
+	allDates := make(map[string]bool)
+	for d := startDate; !d.After(endDate); d = d.AddDate(0, 0, 1) {
+		allDates[d.Format("2006-01-02")] = true
+	}
+
+	// Fill in missing data with 0 values for mental health
+	for _, data := range mentalHealthData {
+		delete(allDates, data.Date)
+	}
+	for date := range allDates {
+		mentalHealthData = append(mentalHealthData, logEntry.MonthlyMentalHealthRes{
+			Date:    date,
+			AvgFeel: 0,
+		})
+	}
+
+	// Fill in missing data with 0 values for physical health
+	for _, data := range physicalHealthData {
+		delete(allDates, data.Date)
+	}
+	for date := range allDates {
+		physicalHealthData = append(physicalHealthData, logEntry.MonthlyPhysicalHealthRes{
+			Date:         date,
+			AvgPainLevel: new(float64), // Initializing with 0 value pointer
+		})
+	}
+
+	sort.Slice(mentalHealthData, func(i, j int) bool {
+		dateI, _ := time.Parse("2006-01-02", mentalHealthData[i].Date)
+		dateJ, _ := time.Parse("2006-01-02", mentalHealthData[j].Date)
+		return dateI.Before(dateJ)
+	})
+
+	sort.Slice(physicalHealthData, func(i, j int) bool {
+		dateI, _ := time.Parse("2006-01-02", physicalHealthData[i].Date)
+		dateJ, _ := time.Parse("2006-01-02", physicalHealthData[j].Date)
+		return dateI.Before(dateJ)
+	})
 
 	response := logEntry.MonthlyInsightsResDto{
 		Status:  true,
@@ -46,20 +95,11 @@ func MonthlyInsights(c *fiber.Ctx) error {
 	return c.Status(fiber.StatusOK).JSON(response)
 }
 
-func MentalHealthInsightMonthsData(c *fiber.Ctx) ([]logEntry.MonthlyMentalHealthRes, error) {
+func MentalHealthInsightMonthsData(c *fiber.Ctx, startDate, endDate time.Time) ([]logEntry.MonthlyMentalHealthRes, error) {
 	var (
 		logEntryColl = database.GetCollection("logEntry")
 		ctx          = c.Context()
 	)
-
-	monthYear := c.Query("monthYear")
-	parsedMonthYear, err := time.Parse("01-2006", monthYear)
-	if err != nil {
-		return nil, fmt.Errorf("Invalid monthYear format: %s", err.Error())
-	}
-
-	startDate := time.Date(parsedMonthYear.Year(), parsedMonthYear.Month(), 1, 0, 0, 0, 0, time.UTC)
-	endDate := startDate.AddDate(0, 1, 0).Add(-time.Nanosecond)
 
 	filter := bson.M{
 		"isDeleted": false,
@@ -107,38 +147,14 @@ func MentalHealthInsightMonthsData(c *fiber.Ctx) ([]logEntry.MonthlyMentalHealth
 		})
 	}
 
-	sort.Slice(monthlyData, func(i, j int) bool {
-		dateI, _ := time.Parse("2006-01-02", monthlyData[i].Date)
-		dateJ, _ := time.Parse("2006-01-02", monthlyData[j].Date)
-		return dateI.Before(dateJ)
-	})
-
-	for i := range monthlyData {
-		if monthlyData[i].AvgFeel == 0 {
-			monthlyData[i].AvgFeel = math.Abs(monthlyData[i].AvgFeel)
-		} else if dayCount[monthlyData[i].Date] != 0 {
-			monthlyData[i].AvgFeel *= -1
-		}
-	}
-
 	return monthlyData, nil
 }
 
-
-func PhysicalHealthInsightMonthsData(c *fiber.Ctx) ([]logEntry.MonthlyPhysicalHealthRes, error) {
+func PhysicalHealthInsightMonthsData(c *fiber.Ctx, startDate, endDate time.Time) ([]logEntry.MonthlyPhysicalHealthRes, error) {
 	var (
 		logEntryColl = database.GetCollection("logEntry")
 		ctx          = c.Context()
 	)
-
-	monthYear := c.Query("monthYear")
-	parsedMonthYear, err := time.Parse("01-2006", monthYear)
-	if err != nil {
-		return nil, fmt.Errorf("Invalid monthYear format: %s", err.Error())
-	}
-
-	startDate := time.Date(parsedMonthYear.Year(), parsedMonthYear.Month(), 1, 0, 0, 0, 0, time.UTC)
-	endDate := startDate.AddDate(0, 1, 0).Add(-time.Nanosecond)
 
 	filter := bson.M{
 		"isDeleted": false,
@@ -188,13 +204,6 @@ func PhysicalHealthInsightMonthsData(c *fiber.Ctx) ([]logEntry.MonthlyPhysicalHe
 			AvgPainLevel: &avg,
 		})
 	}
-
-	// Sort the data by date
-	sort.Slice(monthlyData, func(i, j int) bool {
-		dateI, _ := time.Parse("2006-01-02", monthlyData[i].Date)
-		dateJ, _ := time.Parse("2006-01-02", monthlyData[j].Date)
-		return dateI.Before(dateJ)
-	})
 
 	return monthlyData, nil
 }
