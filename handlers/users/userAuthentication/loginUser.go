@@ -41,13 +41,14 @@ func LoginUser(c *fiber.Ctx) error {
 			Message: "failed to parse data" + err.Error(),
 		})
 	}
+
 	smallEmail := strings.ToLower(data.Email)
 	err = userColl.FindOne(ctx, bson.M{"email": smallEmail}).Decode(&user)
 	if err != nil {
 		if err == mongo.ErrNoDocuments {
 			return c.Status(500).JSON(userAuth.LoginResDto{
 				Status:  false,
-				Message: "invalid credentials" + err.Error(),
+				Message: "Email does not exist",
 			})
 		}
 		return c.Status(500).JSON(userAuth.LoginResDto{
