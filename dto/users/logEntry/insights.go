@@ -55,3 +55,24 @@ type MonthlyMentalHealthRes struct {
 	Date    string  `json:"date" bson:"date"`
 	AvgFeel float64 `json:"avgFeel" bson:"avgFeel"`
 }
+
+type YearlyInsightsResDto struct {
+	Status  bool               `json:"status"`
+	Message string             `json:"message"`
+	Data    YearlyInsightsData `json:"data"`
+}
+
+type YearlyInsightsData struct {
+	MentalHealth   []YearlyPhysicalHealthRes `json:"mentalHealth"`
+	PhysicalHealth []YearlyMentalHealthRes   `json:"physicalHealth"`
+}
+
+type YearlyPhysicalHealthRes struct {
+	AvgFeel              int32 `json:"avgFeel" bson:"avgFeel"`
+	TotalMentalHealthLog int64 `json:"totalMentalHealthLog" bson:"totalMentalHealthLog"`
+}
+
+type YearlyMentalHealthRes struct {
+	AvgFeel              int32 `json:"avgFeel" bson:"avgFeel"`
+	TotalMentalHealthLog int64 `json:"totalMentalHealthLog" bson:"totalMentalHealthLog"`
+}

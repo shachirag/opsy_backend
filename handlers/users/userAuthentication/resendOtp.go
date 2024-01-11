@@ -6,6 +6,7 @@ import (
 	userAuth "opsy_backend/dto/users/userAuthentication"
 	"opsy_backend/entity"
 	"opsy_backend/utils"
+	"strings"
 	"time"
 
 	"github.com/gofiber/fiber/v2"
@@ -36,9 +37,9 @@ func ResendOTP(c *fiber.Ctx) error {
 			Message: err.Error(),
 		})
 	}
-
+	smallEmail := strings.ToLower(data.Email)
 	// Find the existing OTP data for the provided email
-	err = otpColl.FindOne(ctx, bson.M{"email": data.Email}).Decode(&otpData)
+	err = otpColl.FindOne(ctx, bson.M{"email": smallEmail}).Decode(&otpData)
 	if err != nil {
 		if err == mongo.ErrNoDocuments {
 			return c.Status(fiber.StatusNotFound).JSON(userAuth.UserPasswordResDto{
@@ -61,7 +62,7 @@ func ResendOTP(c *fiber.Ctx) error {
 
 	update := bson.M{"$set": bson.M{"otp": newOTP, "createdAt": otpData.CreatedAt}}
 
-	_, err = otpColl.UpdateOne(ctx, bson.M{"email": data.Email}, update)
+	_, err = otpColl.UpdateOne(ctx, bson.M{"email": smallEmail}, update)
 	if err != nil {
 		return c.Status(fiber.StatusInternalServerError).JSON(userAuth.UserPasswordResDto{
 			Status:  false,

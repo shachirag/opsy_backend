@@ -6,6 +6,7 @@ import (
 	userAuth "opsy_backend/dto/users/userAuthentication"
 	"opsy_backend/entity"
 	"opsy_backend/utils"
+	"strings"
 	"time"
 
 	"github.com/gofiber/fiber/v2"
@@ -38,9 +39,9 @@ func ForgotPassword(c *fiber.Ctx) error {
 			Message: err.Error(),
 		})
 	}
-
+	smallEmail := strings.ToLower(data.Email)
 	// Find the user with email address from client
-	err = userColl.FindOne(ctx, bson.M{"email": data.Email}).Decode(&user)
+	err = userColl.FindOne(ctx, bson.M{"email": smallEmail}).Decode(&user)
 	if err != nil {
 		// Check if there is no documents found error
 		if err == mongo.ErrNoDocuments {
@@ -55,7 +56,7 @@ func ForgotPassword(c *fiber.Ctx) error {
 			Message: "Internal server error, while getting the user: " + err.Error(),
 		})
 	}
-	
+
 	// Generate 6-digit OTP
 	otp := utils.Generate6DigitOtp()
 	fmt.Println(otp)
@@ -63,7 +64,7 @@ func ForgotPassword(c *fiber.Ctx) error {
 	otpData := entity.OtpEntity{
 		Id:        primitive.NewObjectID(),
 		Otp:       otp,
-		Email:     data.Email,
+		Email:     smallEmail,
 		CreatedAt: time.Now().UTC(),
 	}
 

@@ -5,6 +5,7 @@ import (
 	userAuth "opsy_backend/dto/users/userAuthentication"
 	"opsy_backend/entity"
 	"opsy_backend/utils"
+	"strings"
 
 	"github.com/gofiber/fiber/v2"
 	"go.mongodb.org/mongo-driver/bson"
@@ -34,9 +35,9 @@ func ResetPasswordAfterOtp(c *fiber.Ctx) error {
 			Message: err.Error(),
 		})
 	}
-
+	smallEmail := strings.ToLower(data.Email)
 	// Find the user with email address from client
-	err = userColl.FindOne(ctx, bson.M{"email": data.Email}).Decode(&user)
+	err = userColl.FindOne(ctx, bson.M{"email": smallEmail}).Decode(&user)
 	if err != nil {
 		// Check if there is no documents found error
 		if err == mongo.ErrNoDocuments {

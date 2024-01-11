@@ -49,9 +49,9 @@ func VerifyOtpForSignup(c *fiber.Ctx) error {
 			Message: "Entered OTP is required",
 		})
 	}
-
+	smallEmail := strings.ToLower(data.Email)
 	// Find the user with email address from client
-	err = otpColl.FindOne(ctx, bson.M{"email": data.Email}, options.FindOne().SetSort(bson.M{"createdAt": -1})).Decode(&otpData)
+	err = otpColl.FindOne(ctx, bson.M{"email": smallEmail}, options.FindOne().SetSort(bson.M{"createdAt": -1})).Decode(&otpData)
 	if err != nil {
 		// Check if there is no documents found error
 		if err == mongo.ErrNoDocuments {
@@ -111,7 +111,7 @@ func VerifyOtpForSignup(c *fiber.Ctx) error {
 	user := entity.UserEntity{
 		Id:        id,
 		Name:      data.Name,
-		Email:     data.Email,
+		Email:     smallEmail,
 		Password:  string(hashedPassword),
 		CreatedAt: time.Now().UTC(),
 		UpdatedAt: time.Now().UTC(),

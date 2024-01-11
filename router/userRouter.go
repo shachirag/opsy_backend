@@ -46,6 +46,7 @@ func UsersSetupsRoutes(app *fiber.App) {
 	// user.Get("/physical-health-months", jwt, logEntry.PhysicalHealthInsightMonths)
 	user.Get("/logentry-info/:id", jwt, logEntry.FetchLogEntryById)
 	user.Put("/edit-appointment/:id", jwt, logEntry.UpdateLogEntry)
+	// user.Get("/yearly-insights/:id", jwt, logEntry.YearlyInsights)
 
 	// user.Get("/insight-year", jwt, logEntry.InsightWeeks)
 }

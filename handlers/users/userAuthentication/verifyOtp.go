@@ -4,6 +4,7 @@ import (
 	"opsy_backend/database"
 	userAuth "opsy_backend/dto/users/userAuthentication"
 	"opsy_backend/entity"
+	"strings"
 
 	"github.com/gofiber/fiber/v2"
 	"go.mongodb.org/mongo-driver/bson"
@@ -22,7 +23,7 @@ import (
 func VerifyOtp(c *fiber.Ctx) error {
 	var (
 		otpColl = database.GetCollection("otp")
-		data  userAuth.VerifyOtpReqDto
+		data    userAuth.VerifyOtpReqDto
 		otpData entity.OtpEntity
 	)
 
@@ -42,9 +43,9 @@ func VerifyOtp(c *fiber.Ctx) error {
 			Message: "Entered OTP is required",
 		})
 	}
-
+	smallEmail := strings.ToLower(data.Email)
 	// Find the user with email address from client
-	err = otpColl.FindOne(ctx, bson.M{"email": data.Email}, options.FindOne().SetSort(bson.M{"createdAt": -1})).Decode(&otpData)
+	err = otpColl.FindOne(ctx, bson.M{"email": smallEmail}, options.FindOne().SetSort(bson.M{"createdAt": -1})).Decode(&otpData)
 	if err != nil {
 		// Check if there is no documents found error
 		if err == mongo.ErrNoDocuments {
