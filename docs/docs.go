@@ -374,7 +374,7 @@ const docTemplate = `{
                 "parameters": [
                     {
                         "type": "string",
-                        "description": "Month and Year (YYYY-MM)",
+                        "description": "Month and Year (MM-YYYY)",
                         "name": "monthYear",
                         "in": "query",
                         "required": true

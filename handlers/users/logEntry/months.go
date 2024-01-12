@@ -20,10 +20,17 @@ import (
 // @Param month query string true "Month (01-12)"
 // @Param year query string true "Year (YYYY)"
 // @Success 200 {object} logEntry.CatgoriesResDto "Successfully fetched log entry data"
-// @Failure 400 {object} logEntry.CatgoriesResDto "Invalid date format or missing parameters"
+// @Failure 400 {object} logEntry.CatgoriesResDto "Invalid date format or missing parameters" 
 // @Failure 500 {object} logEntry.CatgoriesResDto "Failed to fetch or process data"
 // @Router /user/months [get]
 func Months(c *fiber.Ctx) error {
+	// userId, err := auth.GetUserIdFromToken(c.Get("Authorization"))
+	// if err != nil {
+	// 	return c.Status(fiber.StatusUnauthorized).JSON(logEntry.LogentryResDto{
+	// 		Status:  false,
+	// 		Message: "Unauthorized: " + err.Error(),
+	// 	})
+	// }
 	var (
 		logEntryColl = database.GetCollection("logEntry")
 	)
@@ -41,7 +48,7 @@ func Months(c *fiber.Ctx) error {
 
 	filter := bson.M{
 		"isDeleted": false,
-		"when": bson.M{"$gte": date, "$lte": getLastDateOfMonth(date)},
+		"when":      bson.M{"$gte": date, "$lte": getLastDateOfMonth(date)},
 	}
 	sortOptions := options.Find().SetSort(bson.M{"updatedAt": -1})
 

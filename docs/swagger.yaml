@@ -560,7 +560,7 @@ paths:
       description: Retrieves mental health and physical health data for a specified
         month
       parameters:
-      - description: Month and Year (YYYY-MM)
+      - description: Month and Year (MM-YYYY)
         in: query
         name: monthYear
         required: true
