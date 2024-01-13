@@ -9,6 +9,7 @@ import (
 
 	"github.com/gofiber/fiber/v2"
 	"go.mongodb.org/mongo-driver/bson"
+	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
@@ -17,10 +18,11 @@ import (
 // @Tags logEntry
 // @Description Fetch log entry data for a specific month and year.
 // @Produce json
+// @Param userId query string true "user ID"
 // @Param month query string true "Month (01-12)"
 // @Param year query string true "Year (YYYY)"
 // @Success 200 {object} logEntry.CatgoriesResDto "Successfully fetched log entry data"
-// @Failure 400 {object} logEntry.CatgoriesResDto "Invalid date format or missing parameters" 
+// @Failure 400 {object} logEntry.CatgoriesResDto "Invalid date format or missing parameters"
 // @Failure 500 {object} logEntry.CatgoriesResDto "Failed to fetch or process data"
 // @Router /user/months [get]
 func Months(c *fiber.Ctx) error {
@@ -44,11 +46,21 @@ func Months(c *fiber.Ctx) error {
 		})
 	}
 
+	userId := c.Query("userId")
+	userObjID, err := primitive.ObjectIDFromHex(userId)
+
+	if err != nil {
+		return c.Status(400).JSON(logEntry.CatgoriesResDto{
+			Status:  false,
+			Message: "invalid objectId " + err.Error(),
+		})
+	}
 	// Adjust the format of todayStart to match the createdAt format in MongoDB
 
 	filter := bson.M{
 		"isDeleted": false,
 		"when":      bson.M{"$gte": date, "$lte": getLastDateOfMonth(date)},
+		"userId":    userObjID,
 	}
 	sortOptions := options.Find().SetSort(bson.M{"updatedAt": -1})
 

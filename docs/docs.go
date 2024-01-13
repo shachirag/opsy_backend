@@ -403,6 +403,13 @@ const docTemplate = `{
                 "parameters": [
                     {
                         "type": "string",
+                        "description": "user ID",
+                        "name": "userId",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
                         "description": "Month (01-12)",
                         "name": "month",
                         "in": "query",
@@ -855,6 +862,9 @@ const docTemplate = `{
                     "type": "integer"
                 },
                 "type": {
+                    "type": "string"
+                },
+                "userId": {
                     "type": "string"
                 },
                 "ways": {

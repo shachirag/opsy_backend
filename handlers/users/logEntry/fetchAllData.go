@@ -6,8 +6,10 @@ import (
 	logEntry "opsy_backend/dto/users/logEntry"
 	"opsy_backend/entity"
 	"time"
+
 	"github.com/gofiber/fiber/v2"
 	"go.mongodb.org/mongo-driver/bson"
+	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
@@ -41,11 +43,21 @@ func FetchAllData(c *fiber.Ctx) error {
 		})
 	}
 
+	userId := c.Query("userId")
+	userObjID, err := primitive.ObjectIDFromHex(userId)
+
+	if err != nil {
+		return c.Status(400).JSON(logEntry.CatgoriesResDto{
+			Status:  false,
+			Message: "invalid objectId " + err.Error(),
+		})
+	}
 	// Adjust the format of todayStart to match the createdAt format in MongoDB
 
 	filter := bson.M{
 		"isDeleted": false,
 		"when":      bson.M{"$gte": date, "$lte": date.Add(24 * time.Hour)},
+		"userId":    userObjID,
 	}
 
 	sortOptions := options.Find().SetSort(bson.M{"updatedAt": -1})
