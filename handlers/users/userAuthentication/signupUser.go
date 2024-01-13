@@ -39,7 +39,7 @@ func SignupUser(c *fiber.Ctx) error {
 	// Check if email is not already used
 	filter := bson.M{
 		"email":    strings.ToLower(data.Email),
-		"isDeletd": false,
+		"isDeleted": false,
 	}
 
 	exists, err := userColl.CountDocuments(ctx, filter)
