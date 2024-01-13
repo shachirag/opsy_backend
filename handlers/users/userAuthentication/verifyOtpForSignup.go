@@ -50,7 +50,7 @@ func VerifyOtpForSignup(c *fiber.Ctx) error {
 		})
 	}
 	smallEmail := strings.ToLower(data.Email)
-	filter := bson.M{"email": smallEmail, "isDeleted": false}
+	filter := bson.M{"email": smallEmail}
 	// Find the user with email address from client
 	err = otpColl.FindOne(ctx, filter, options.FindOne().SetSort(bson.M{"createdAt": -1})).Decode(&otpData)
 	if err != nil {
@@ -89,6 +89,7 @@ func VerifyOtpForSignup(c *fiber.Ctx) error {
 	// Check if email is not already used
 	filter = bson.M{
 		"email": strings.ToLower(data.Email),
+		"isDeleted": false
 	}
 
 	exists, err := userColl.CountDocuments(ctx, filter)
