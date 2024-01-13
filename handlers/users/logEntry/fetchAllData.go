@@ -6,7 +6,6 @@ import (
 	logEntry "opsy_backend/dto/users/logEntry"
 	"opsy_backend/entity"
 	"time"
-
 	"github.com/gofiber/fiber/v2"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo/options"
@@ -20,6 +19,13 @@ import (
 // @Success 200 {object} logEntry.CatgoriesResDto
 // @Router /user/fetch-all-data [get]
 func FetchAllData(c *fiber.Ctx) error {
+	// userId, err := auth.GetUserIdFromToken(c.Get("Authorization"))
+	// if err != nil {
+	// 	return c.Status(fiber.StatusUnauthorized).JSON(logEntry.LogentryResDto{
+	// 		Status:  false,
+	// 		Message: "Unauthorized: " + err.Error(),
+	// 	})
+	// }
 	var (
 		logEntryColl = database.GetCollection("logEntry")
 	)
@@ -39,9 +45,9 @@ func FetchAllData(c *fiber.Ctx) error {
 
 	filter := bson.M{
 		"isDeleted": false,
-		"when": bson.M{"$gte": date, "$lte": date.Add(24 * time.Hour)},
+		"when":      bson.M{"$gte": date, "$lte": date.Add(24 * time.Hour)},
 	}
-    
+
 	sortOptions := options.Find().SetSort(bson.M{"updatedAt": -1})
 
 	// Fetch data based on filters
@@ -94,4 +100,3 @@ func FetchAllData(c *fiber.Ctx) error {
 		Data:    logEntryData,
 	})
 }
-
