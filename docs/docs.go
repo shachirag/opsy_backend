@@ -374,7 +374,7 @@ const docTemplate = `{
                 "parameters": [
                     {
                         "type": "string",
-                        "description": "Month and Year (YYYY-MM)",
+                        "description": "Month and Year (MM-YYYY)",
                         "name": "monthYear",
                         "in": "query",
                         "required": true
@@ -687,6 +687,38 @@ const docTemplate = `{
                     }
                 }
             }
+        },
+        "/user/yearly-insights": {
+            "get": {
+                "description": "Retrieves mental health and physical health data for each month of the specified year",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "logEntry"
+                ],
+                "summary": "Fetch monthly insights data for a specific year",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Year (YYYY)",
+                        "name": "year",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/opsy_backend_handlers_users_logEntry.YearInsightsResDto"
+                        }
+                    }
+                }
+            }
         }
     },
     "definitions": {
@@ -918,6 +950,59 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "day": {
+                    "type": "string"
+                }
+            }
+        },
+        "opsy_backend_handlers_users_logEntry.YearInsightsResDto": {
+            "type": "object",
+            "properties": {
+                "data": {
+                    "$ref": "#/definitions/opsy_backend_handlers_users_logEntry.YearlyInsightsRes"
+                },
+                "message": {
+                    "type": "string"
+                },
+                "status": {
+                    "type": "boolean"
+                }
+            }
+        },
+        "opsy_backend_handlers_users_logEntry.YearlyInsightsRes": {
+            "type": "object",
+            "properties": {
+                "mentalHealth": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/opsy_backend_handlers_users_logEntry.YearlyMentalHealthInsightsResData"
+                    }
+                },
+                "physicalHealth": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/opsy_backend_handlers_users_logEntry.YearlyPhysicalHealthInsightsResData"
+                    }
+                }
+            }
+        },
+        "opsy_backend_handlers_users_logEntry.YearlyMentalHealthInsightsResData": {
+            "type": "object",
+            "properties": {
+                "avgFeel": {
+                    "type": "number"
+                },
+                "month": {
+                    "type": "string"
+                }
+            }
+        },
+        "opsy_backend_handlers_users_logEntry.YearlyPhysicalHealthInsightsResData": {
+            "type": "object",
+            "properties": {
+                "avgPainLevel": {
+                    "type": "number"
+                },
+                "month": {
                     "type": "string"
                 }
             }
