@@ -37,9 +37,10 @@ func UsersSetupsRoutes(app *fiber.App) {
 	user.Get("/get-info/:id", jwt, userAuthenticate.FetchUserById)
 	user.Put("/change-password/:id", jwt, userAuthenticate.ChangeUserPassword)
 	user.Get("/get-misc-data", jwt, userAuthenticate.FetchAllMiscData)
+	user.Put("/delete-account/:id", jwt, userAuthenticate.DeleteAccount)
 	//log Entries
 	user.Post("/create-log-entry", jwt, logEntry.CreateLogEntry)
-	user.Get("/fetch-all-data", jwt, logEntry.FetchAllData)
+	user.Get("/fetch-all-data",  logEntry.FetchAllData)
 	user.Get("/months", jwt, logEntry.Months)
 	user.Get("/weekly-insights", jwt, logEntry.WeeklyInsights)
 	user.Get("/monthly-insights", jwt, logEntry.MonthlyInsights)
@@ -47,6 +48,7 @@ func UsersSetupsRoutes(app *fiber.App) {
 	user.Get("/logentry-info/:id", jwt, logEntry.FetchLogEntryById)
 	user.Put("/edit-appointment/:id", jwt, logEntry.UpdateLogEntry)
 	user.Get("/yearly-insights", jwt, logEntry.YearlyInsights)
+	user.Get("/get-future-appointments", logEntry.FetchFutureAppointments)
 
 	// user.Get("/insight-year", jwt, logEntry.InsightWeeks)
 }

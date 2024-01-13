@@ -50,8 +50,9 @@ func VerifyOtpForSignup(c *fiber.Ctx) error {
 		})
 	}
 	smallEmail := strings.ToLower(data.Email)
+	filter := bson.M{"email": smallEmail, "isDeleted": false}
 	// Find the user with email address from client
-	err = otpColl.FindOne(ctx, bson.M{"email": smallEmail}, options.FindOne().SetSort(bson.M{"createdAt": -1})).Decode(&otpData)
+	err = otpColl.FindOne(ctx, filter, options.FindOne().SetSort(bson.M{"createdAt": -1})).Decode(&otpData)
 	if err != nil {
 		// Check if there is no documents found error
 		if err == mongo.ErrNoDocuments {
@@ -86,7 +87,7 @@ func VerifyOtpForSignup(c *fiber.Ctx) error {
 	}
 
 	// Check if email is not already used
-	filter := bson.M{
+	filter = bson.M{
 		"email": strings.ToLower(data.Email),
 	}
 
@@ -112,6 +113,7 @@ func VerifyOtpForSignup(c *fiber.Ctx) error {
 		Id:        id,
 		Name:      data.Name,
 		Email:     smallEmail,
+		IsDeleted: false,
 		Password:  string(hashedPassword),
 		CreatedAt: time.Now().UTC(),
 		UpdatedAt: time.Now().UTC(),

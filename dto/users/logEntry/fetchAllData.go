@@ -26,4 +26,11 @@ type CategoriesRes struct {
 	UpdatedAt   time.Time          `json:"updatedAt" bson:"updatedAt"`
 }
 
+type DeleteResDto struct {
+	Status  bool            `json:"status"`
+	Message string          `json:"message"`
+}
+
+
+
 

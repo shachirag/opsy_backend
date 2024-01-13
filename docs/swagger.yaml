@@ -1,5 +1,20 @@
 basePath: /
 definitions:
+  logEntry.AppointmentRes:
+    properties:
+      alert:
+        type: string
+      id:
+        type: string
+      notes:
+        type: string
+      updatedAt:
+        type: string
+      whatItIsFor:
+        type: string
+      when:
+        type: string
+    type: object
   logEntry.CategoriesRes:
     properties:
       alert:
@@ -38,8 +53,45 @@ definitions:
       status:
         type: boolean
     type: object
+  logEntry.DeleteResDto:
+    properties:
+      message:
+        type: string
+      status:
+        type: boolean
+    type: object
+  logEntry.FutureAppointmentDto:
+    properties:
+      data:
+        items:
+          $ref: '#/definitions/logEntry.FutureAppointmentRes'
+        type: array
+      message:
+        type: string
+      status:
+        type: boolean
+    type: object
+  logEntry.FutureAppointmentRes:
+    properties:
+      alert:
+        type: string
+      createdAt:
+        type: string
+      id:
+        type: string
+      notes:
+        type: string
+      updatedAt:
+        type: string
+      whatItIsFor:
+        type: string
+      when:
+        type: string
+    type: object
   logEntry.GetAppointmentResDto:
     properties:
+      data:
+        $ref: '#/definitions/logEntry.AppointmentRes'
       message:
         type: string
       status:
@@ -47,8 +99,8 @@ definitions:
     type: object
   logEntry.GetLogEntryResDto:
     properties:
-      id:
-        type: string
+      data:
+        $ref: '#/definitions/logEntry.LogEntryRes'
       message:
         type: string
       status:
@@ -95,6 +147,33 @@ definitions:
           type: string
         type: array
       whatItIsFor:
+        type: string
+    type: object
+  logEntry.LogEntryRes:
+    properties:
+      alert:
+        type: string
+      createdAt:
+        type: string
+      feel:
+        type: string
+      id:
+        type: string
+      notes:
+        type: string
+      painLevel:
+        type: integer
+      type:
+        type: string
+      updatedAt:
+        type: string
+      ways:
+        items:
+          type: string
+        type: array
+      whatItIsFor:
+        type: string
+      when:
         type: string
     type: object
   logEntry.LogentryRes:
@@ -419,6 +498,32 @@ paths:
       summary: CreateLogEntry
       tags:
       - logEntry
+  /user/delete-account/{id}:
+    put:
+      consumes:
+      - application/json
+      description: delete account
+      parameters:
+      - description: Authentication header
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: customer ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/logEntry.DeleteResDto'
+      summary: delete account
+      tags:
+      - user authorization
   /user/edit-appointment/{id}:
     put:
       consumes:
@@ -461,6 +566,11 @@ paths:
     get:
       description: fetch all required data
       parameters:
+      - description: user ID
+        in: query
+        name: userId
+        required: true
+        type: string
       - description: date (YYYY-MM-DD)
         in: query
         name: date
@@ -498,6 +608,19 @@ paths:
       summary: Forgot Password
       tags:
       - user authorization
+  /user/get-future-appointments:
+    get:
+      description: fetch all required data
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/logEntry.FutureAppointmentDto'
+      summary: fetch all required data
+      tags:
+      - logEntry
   /user/get-info/{id}:
     get:
       consumes:
@@ -596,6 +719,11 @@ paths:
       description: Retrieves mental health and physical health data for a specified
         month
       parameters:
+      - description: user ID
+        in: query
+        name: userId
+        required: true
+        type: string
       - description: Month and Year (MM-YYYY)
         in: query
         name: monthYear
@@ -793,6 +921,11 @@ paths:
       description: Retrieves mental health and physical health data for a specified
         week
       parameters:
+      - description: user ID
+        in: query
+        name: userId
+        required: true
+        type: string
       - description: Start date of the week (YYYY-MM-DD)
         in: query
         name: firstDate
@@ -820,6 +953,11 @@ paths:
       description: Retrieves mental health and physical health data for each month
         of the specified year
       parameters:
+      - description: user ID
+        in: query
+        name: userId
+        required: true
+        type: string
       - description: Year (YYYY)
         in: query
         name: year

@@ -1,7 +1,6 @@
 package userAuthenticate
 
 import (
-	"fmt"
 	"opsy_backend/database"
 	userAuth "opsy_backend/dto/users/userAuthentication"
 	"opsy_backend/entity"
@@ -39,7 +38,8 @@ func SignupUser(c *fiber.Ctx) error {
 
 	// Check if email is not already used
 	filter := bson.M{
-		"email": strings.ToLower(data.Email),
+		"email":    strings.ToLower(data.Email),
+		"isDeletd": false,
 	}
 
 	exists, err := userColl.CountDocuments(ctx, filter)
@@ -56,9 +56,9 @@ func SignupUser(c *fiber.Ctx) error {
 			Message: "Email is already in use",
 		})
 	}
-	// Generate a 6-digit OTP
+
 	otp := utils.Generate6DigitOtp()
-	fmt.Println(otp)
+
 	smallEmail := strings.ToLower(data.Email)
 	// Store the OTP in the forgotPassword collection
 	otpData := entity.OtpEntity{

@@ -99,6 +99,45 @@ const docTemplate = `{
                 }
             }
         },
+        "/user/delete-account/{id}": {
+            "put": {
+                "description": "delete account",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "user authorization"
+                ],
+                "summary": "delete account",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Authentication header",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "customer ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/logEntry.DeleteResDto"
+                        }
+                    }
+                }
+            }
+        },
         "/user/edit-appointment/{id}": {
             "put": {
                 "description": "Update appointment",
@@ -171,6 +210,13 @@ const docTemplate = `{
                 "parameters": [
                     {
                         "type": "string",
+                        "description": "user ID",
+                        "name": "userId",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
                         "description": "date (YYYY-MM-DD)",
                         "name": "date",
                         "in": "query",
@@ -216,6 +262,26 @@ const docTemplate = `{
                         "description": "OK",
                         "schema": {
                             "$ref": "#/definitions/userAuth.UserPasswordResDto"
+                        }
+                    }
+                }
+            }
+        },
+        "/user/get-future-appointments": {
+            "get": {
+                "description": "fetch all required data",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "logEntry"
+                ],
+                "summary": "fetch all required data",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/logEntry.FutureAppointmentDto"
                         }
                     }
                 }
@@ -372,6 +438,13 @@ const docTemplate = `{
                 ],
                 "summary": "Fetch monthly insights data",
                 "parameters": [
+                    {
+                        "type": "string",
+                        "description": "user ID",
+                        "name": "userId",
+                        "in": "query",
+                        "required": true
+                    },
                     {
                         "type": "string",
                         "description": "Month and Year (MM-YYYY)",
@@ -672,6 +745,13 @@ const docTemplate = `{
                 "parameters": [
                     {
                         "type": "string",
+                        "description": "user ID",
+                        "name": "userId",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
                         "description": "Start date of the week (YYYY-MM-DD)",
                         "name": "firstDate",
                         "in": "query",
@@ -711,6 +791,13 @@ const docTemplate = `{
                 "parameters": [
                     {
                         "type": "string",
+                        "description": "user ID",
+                        "name": "userId",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
                         "description": "Year (YYYY)",
                         "name": "year",
                         "in": "query",
@@ -729,6 +816,29 @@ const docTemplate = `{
         }
     },
     "definitions": {
+        "logEntry.AppointmentRes": {
+            "type": "object",
+            "properties": {
+                "alert": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "notes": {
+                    "type": "string"
+                },
+                "updatedAt": {
+                    "type": "string"
+                },
+                "whatItIsFor": {
+                    "type": "string"
+                },
+                "when": {
+                    "type": "string"
+                }
+            }
+        },
         "logEntry.CategoriesRes": {
             "type": "object",
             "properties": {
@@ -787,9 +897,66 @@ const docTemplate = `{
                 }
             }
         },
+        "logEntry.DeleteResDto": {
+            "type": "object",
+            "properties": {
+                "message": {
+                    "type": "string"
+                },
+                "status": {
+                    "type": "boolean"
+                }
+            }
+        },
+        "logEntry.FutureAppointmentDto": {
+            "type": "object",
+            "properties": {
+                "data": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/logEntry.FutureAppointmentRes"
+                    }
+                },
+                "message": {
+                    "type": "string"
+                },
+                "status": {
+                    "type": "boolean"
+                }
+            }
+        },
+        "logEntry.FutureAppointmentRes": {
+            "type": "object",
+            "properties": {
+                "alert": {
+                    "type": "string"
+                },
+                "createdAt": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "notes": {
+                    "type": "string"
+                },
+                "updatedAt": {
+                    "type": "string"
+                },
+                "whatItIsFor": {
+                    "type": "string"
+                },
+                "when": {
+                    "type": "string"
+                }
+            }
+        },
         "logEntry.GetAppointmentResDto": {
             "type": "object",
             "properties": {
+                "data": {
+                    "$ref": "#/definitions/logEntry.AppointmentRes"
+                },
                 "message": {
                     "type": "string"
                 },
@@ -801,8 +968,8 @@ const docTemplate = `{
         "logEntry.GetLogEntryResDto": {
             "type": "object",
             "properties": {
-                "id": {
-                    "type": "string"
+                "data": {
+                    "$ref": "#/definitions/logEntry.LogEntryRes"
                 },
                 "message": {
                     "type": "string"
@@ -874,6 +1041,47 @@ const docTemplate = `{
                     }
                 },
                 "whatItIsFor": {
+                    "type": "string"
+                }
+            }
+        },
+        "logEntry.LogEntryRes": {
+            "type": "object",
+            "properties": {
+                "alert": {
+                    "type": "string"
+                },
+                "createdAt": {
+                    "type": "string"
+                },
+                "feel": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "notes": {
+                    "type": "string"
+                },
+                "painLevel": {
+                    "type": "integer"
+                },
+                "type": {
+                    "type": "string"
+                },
+                "updatedAt": {
+                    "type": "string"
+                },
+                "ways": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "whatItIsFor": {
+                    "type": "string"
+                },
+                "when": {
                     "type": "string"
                 }
             }

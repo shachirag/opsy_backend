@@ -120,5 +120,13 @@ func UpdateLogEntry(c *fiber.Ctx) error {
 	return c.Status(fiber.StatusOK).JSON(logEntry.GetAppointmentResDto{
 		Status:  true,
 		Message: "appointment data updated successfully",
+		Data: logEntry.AppointmentRes{
+			Id:          objID,
+			When:        dateTime,
+			Notes:       data.Notes,
+			WhatItIsFor: data.WhatItIsFor,
+			Alert:       data.Alert,
+			UpdatedAt:   time.Now().UTC(),
+		},
 	})
 }

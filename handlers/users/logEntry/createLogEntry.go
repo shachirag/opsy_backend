@@ -24,10 +24,9 @@ func CreateLogEntry(c *fiber.Ctx) error {
 
 	var (
 		logEntryColl = database.GetCollection("logEntry")
-		// yearlyInsightsColl = database.GetCollection("yearlyInsight")
 		data logEntry.LogEntryReqDto
 	)
-	// Parsing the request body
+
 	err := c.BodyParser(&data)
 	if err != nil {
 		return c.Status(500).JSON(logEntry.GetLogEntryResDto{
@@ -73,6 +72,18 @@ func CreateLogEntry(c *fiber.Ctx) error {
 	return c.Status(fiber.StatusOK).JSON(logEntry.GetLogEntryResDto{
 		Status:  true,
 		Message: "Data inserted successfully",
-		Id:      id,
+		Data: logEntry.LogEntryRes{
+			Id:          id,
+			Type:        data.Type,
+			Feel:        data.Feel,
+			Notes:       data.Notes,
+			Ways:        data.Ways,
+			When:        dateTime,
+			PainLevel:   data.PainLevel,
+			WhatItIsFor: data.WhatItIsFor,
+			Alert:       data.Alert,
+			CreatedAt:   time.Now().UTC(),
+			UpdatedAt:   time.Now().UTC(),
+		},
 	})
 }

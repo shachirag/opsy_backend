@@ -12,6 +12,7 @@ import (
 
 	"github.com/gofiber/fiber/v2"
 	"go.mongodb.org/mongo-driver/bson"
+	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
@@ -20,6 +21,7 @@ import (
 // @Tags logEntry
 // @Accept json
 // @Produce json
+// @Param userId query string true "user ID"
 // @Param monthYear query string true "Month and Year (MM-YYYY)"
 // @Success 200 {object} logEntry.InsightsResDto
 // @Router /user/monthly-insights [get]
@@ -101,9 +103,17 @@ func MentalHealthInsightMonthsData(c *fiber.Ctx, startDate, endDate time.Time) (
 		ctx          = c.Context()
 	)
 
+	userId := c.Query("userId")
+	userObjID, err := primitive.ObjectIDFromHex(userId)
+
+	if err != nil {
+		return nil, fmt.Errorf("invalid object id: %s", err.Error())
+	}
+
 	filter := bson.M{
 		"isDeleted": false,
 		"when":      bson.M{"$gte": startDate, "$lte": endDate},
+		"userId":    userObjID,
 	}
 	sortOptions := options.Find().SetSort(bson.M{"when": 1})
 
@@ -156,9 +166,17 @@ func PhysicalHealthInsightMonthsData(c *fiber.Ctx, startDate, endDate time.Time)
 		ctx          = c.Context()
 	)
 
+	userId := c.Query("userId")
+	userObjID, err := primitive.ObjectIDFromHex(userId)
+
+	if err != nil {
+		return nil, fmt.Errorf("invalid object id: %s", err.Error())
+	}
+
 	filter := bson.M{
 		"isDeleted": false,
 		"when":      bson.M{"$gte": startDate, "$lte": endDate},
+		"userId":    userObjID,
 	}
 
 	sortOptions := options.Find().SetSort(bson.M{"when": 1})

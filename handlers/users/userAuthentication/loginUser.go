@@ -5,10 +5,11 @@ import (
 	"opsy_backend/database"
 	userAuth "opsy_backend/dto/users/userAuthentication"
 	"opsy_backend/entity"
-	jtoken "github.com/golang-jwt/jwt/v4"
 	"os"
 	"strings"
 	"time"
+
+	jtoken "github.com/golang-jwt/jwt/v4"
 
 	"github.com/gofiber/fiber/v2"
 	"go.mongodb.org/mongo-driver/bson"
@@ -43,7 +44,7 @@ func LoginUser(c *fiber.Ctx) error {
 	}
 
 	smallEmail := strings.ToLower(data.Email)
-	err = userColl.FindOne(ctx, bson.M{"email": smallEmail}).Decode(&user)
+	err = userColl.FindOne(ctx, bson.M{"email": smallEmail, "isDeleted": false}).Decode(&user)
 	if err != nil {
 		if err == mongo.ErrNoDocuments {
 			return c.Status(500).JSON(userAuth.LoginResDto{

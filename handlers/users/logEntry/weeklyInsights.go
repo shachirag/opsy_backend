@@ -12,6 +12,7 @@ import (
 
 	"github.com/gofiber/fiber/v2"
 	"go.mongodb.org/mongo-driver/bson"
+	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
@@ -20,6 +21,7 @@ import (
 // @Tags logEntry
 // @Accept json
 // @Produce json
+// @Param userId query string true "user ID"
 // @Param firstDate query string true "Start date of the week (YYYY-MM-DD)"
 // @Param endDate query string true "End date of the week (YYYY-MM-DD)"
 // @Success 200 {object} logEntry.InsightsResDto
@@ -73,10 +75,19 @@ func MentalHealthInsightWeeksData(c *fiber.Ctx) ([]logEntry.MentalHealthRes, err
 	}
 	endOfDay := endDate.Add(24 * time.Hour)
 
+	userId := c.Query("userId")
+	userObjID, err := primitive.ObjectIDFromHex(userId)
+
+	if err != nil {
+		return nil, fmt.Errorf("invalid object id: %s", err.Error())
+	}
+
 	filter := bson.M{
 		"isDeleted": false,
 		"when":      bson.M{"$gte": startDate, "$lte": endOfDay},
+		"userId":    userObjID,
 	}
+
 	sortOptions := options.Find().SetSort(bson.M{"when": 1})
 
 	cursor, err := logEntryColl.Find(ctx, filter, sortOptions)
@@ -164,10 +175,17 @@ func PhysicalHealthInsightWeeksData(c *fiber.Ctx) ([]logEntry.PhysicalHealthRes,
 		return nil, fmt.Errorf("Invalid endDate format: %s", err.Error())
 	}
 	endOfDay := endDate.Add(24 * time.Hour)
+	userId := c.Query("userId")
+	userObjID, err := primitive.ObjectIDFromHex(userId)
+
+	if err != nil {
+		return nil, fmt.Errorf("invalid object id: %s", err.Error())
+	}
 
 	filter := bson.M{
 		"isDeleted": false,
 		"when":      bson.M{"$gte": startDate, "$lte": endOfDay},
+		"userId":    userObjID,
 	}
 	sortOptions := options.Find().SetSort(bson.M{"when": 1})
 

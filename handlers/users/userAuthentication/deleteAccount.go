@@ -1,39 +1,57 @@
 package userAuthenticate
 
-// import (
-// 	"encoding/json"
-// 	"log"
-// 	"net/http"
-// )
-// // Simulated user data (replace this with your actual database)
-// var users = map[string]User{
-// 	"user1": {ID: "user1", Name: "John Doe", Email: "john@example.com"},
-// 	"user2": {ID: "user2", Name: "Jane Doe", Email: "jane@example.com"},
-// }
+import (
+	"net/http"
+	"opsy_backend/database"
+	"opsy_backend/dto/users/logEntry"
 
-// func main() {
-// 	router := mux.NewRouter()
+	"github.com/gofiber/fiber/v2"
+	"go.mongodb.org/mongo-driver/bson"
+	"go.mongodb.org/mongo-driver/bson/primitive"
+)
 
-// 	router.HandleFunc("/api/delete_account/{id}", DeleteAccount).Methods("DELETE")
+// @Summary delete account
+// @Tags user authorization
+// @Description delete account
+// @Accept json
+//
+//	@Param Authorization header	string true	"Authentication header"
+//
+// @Param id path string true "customer ID"
+// @Produce json
+// @Success 200 {object} logEntry.DeleteResDto
+// @Router /user/delete-account/{id} [put]
+func DeleteAccount(c *fiber.Ctx) error {
+	customerID := c.Params("id")
 
-// 	log.Fatal(http.ListenAndServe(":8080", router))
-// }
+	userObjectID, err := primitive.ObjectIDFromHex(customerID)
+	if err != nil {
+		response := logEntry.DeleteResDto{
+			Status:  false,
+			Message: "Invalid user ID",
+		}
+		return c.Status(http.StatusBadRequest).JSON(response)
+	}
 
-// // DeleteAccount handles the deletion of a user account
-// func DeleteAccount(w http.ResponseWriter, r *http.Request) {
-// 	params := mux.Vars(r)
-// 	userID := params["id"]
+	userColl := database.GetCollection("users")
 
-// 	// Check if the user exists
-// 	if _, ok := users[userID]; !ok {
-// 		w.WriteHeader(http.StatusNotFound)
-// 		json.NewEncoder(w).Encode(map[string]string{"error": "User not found"})
-// 		return
-// 	}
+	filter := bson.M{"_id": userObjectID}
 
-// 	// Perform account deletion (replace this with your actual deletion logic)
-// 	delete(users, userID)
+	update := bson.M{"$set": bson.M{"isDeleted": true}}
 
-// 	w.WriteHeader(http.StatusOK)
-// 	json.NewEncoder(w).Encode(map[string]string{"message": "Account deleted successfully"})
-// }
+	_, err = userColl.UpdateOne(ctx, filter, update)
+	if err != nil {
+		response := logEntry.DeleteResDto{
+			Status:  false,
+			Message: "Failed to delete account status: " + err.Error(),
+		}
+		return c.Status(http.StatusInternalServerError).JSON(response)
+	}
+
+	response := logEntry.DeleteResDto{
+		Status:  true,
+		Message: "Account deleted successfully",
+	}
+
+	return c.Status(http.StatusOK).JSON(response)
+}
