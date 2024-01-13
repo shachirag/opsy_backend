@@ -140,7 +140,7 @@ func MentalHealthInsightWeeksData(c *fiber.Ctx) ([]logEntry.MentalHealthRes, err
 
 	for i := range responseData {
 		if dayCount[i] != 0 {
-			responseData[i].AvgFeel *= -1
+			responseData[i].AvgFeel *= 1
 		}
 	}
 
