@@ -7,7 +7,7 @@ type YearlyInsightsEntity struct {
 	MentalHealth   []MentalHealth     `json:"mentalHealth" bson:"mentalHealth"`
 	PhysicalHealth []PhysicalHealth   `json:"physicalHealth" bson:"physicalHealth"`
 	Month          int32              `json:"month" bson:"month"`
-	Year           int32             `json:"year" bson:"year"`
+	Year           int32              `json:"year" bson:"year"`
 }
 
 type MentalHealth struct {
@@ -16,6 +16,6 @@ type MentalHealth struct {
 }
 
 type PhysicalHealth struct {
-	AvgFeel              int32 `json:"avgFeel" bson:"avgFeel"`
+	AvgPain              int32 `json:"avgPain" bson:"avgPain"`
 	TotalMentalHealthLog int64 `json:"totalMentalHealthLog" bson:"totalMentalHealthLog"`
 }

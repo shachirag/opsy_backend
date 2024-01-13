@@ -8,9 +8,7 @@ import (
 	"time"
 
 	"github.com/gofiber/fiber/v2"
-	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
-	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
 var ctx = context.Background()
@@ -26,7 +24,7 @@ func CreateLogEntry(c *fiber.Ctx) error {
 
 	var (
 		logEntryColl       = database.GetCollection("logEntry")
-		yearlyInsightsColl = database.GetCollection("yearlyInsights")
+		// yearlyInsightsColl = database.GetCollection("yearlyInsight")
 		data               logEntry.LogEntryReqDto
 	)
 	// Parsing the request body
@@ -71,32 +69,80 @@ func CreateLogEntry(c *fiber.Ctx) error {
 		})
 	}
 
-	year := dateTime.Year()
-	month := int32(dateTime.Month())
+	// var mapFeel = map[string]int{
+	// 	"In Crisis":  -1,
+	// 	"Struggling": -2,
+	// 	"Surviving":  -3,
+	// 	"Thriving":   -4,
+	// 	"Excelling":  -5,
+	// }
 
-	filter := bson.M{"year": year, "month": month}
-	update := bson.M{
-		"$push": bson.M{
-			"mentalHealth": bson.M{
-				"avgFeel":              logEntryData.Feel,
-				"totalMentalHealthLog": 1,
-			},
-			"physicalHealth": bson.M{
-				"avgFeel":              logEntryData.Feel,
-				"totalMentalHealthLog": 1,
-			},
-		},
-	}
+	// // Calculate the weighted average feel based on mapFeel values
+	// weightedAvgFeel := mapFeel[data.Feel]
 
-	_, err = yearlyInsightsColl.UpdateOne(ctx, filter, update, options.Update().SetUpsert(true))
-	if err != nil {
+	// // Update Yearly Insights
+	// year, month, _ := logEntryData.When.Date()
+	// filter := bson.M{"year": year, "month": int32(month)}
 
-		return c.Status(fiber.StatusOK).JSON(logEntry.GetLogEntryResDto{
-			Status:  true,
-			Message: "Data inserted successfully",
-			Id:      id,
-		})
-	}
+	// mentalHealthUpdate := bson.M{
+	// 	"$inc": bson.M{
+	// 		"mentalHealth.$.totalMentalHealthLog": 1,
+	// 		"mentalHealth.$.avgFeel":              weightedAvgFeel,
+	// 	},
+	// }
+
+	// physicalHealthUpdate := bson.M{
+	// 	"$inc": bson.M{
+	// 		"physicalHealth.$.totalMentalHealthLog": 1,
+	// 		"physicalHealth.$.avgPain":              logEntryData.PainLevel,
+	// 	},
+	// }
+
+	// result, err := yearlyInsightsColl.UpdateOne(ctx, filter, mentalHealthUpdate)
+	// if err != nil {
+	// 	return c.Status(fiber.StatusInternalServerError).JSON(logEntry.GetLogEntryResDto{
+	// 		Status:  false,
+	// 		Message: "failed to update Yearly Insights " + err.Error(),
+	// 	})
+	// }
+
+	// // Update physical health
+	// _, err = yearlyInsightsColl.UpdateOne(ctx, filter, physicalHealthUpdate)
+	// if err != nil {
+	// 	return c.Status(fiber.StatusInternalServerError).JSON(logEntry.GetLogEntryResDto{
+	// 		Status:  false,
+	// 		Message: "failed to update Yearly Insights (physical health) " + err.Error(),
+	// 	})
+	// }
+
+	// if result.MatchedCount == 0 {
+	// 	// If the document does not exist, create a new one
+	// 	yearlyInsightsData := entity.YearlyInsightsEntity{
+	// 		Month: int32(month),
+	// 		Year:  int32(year),
+	// 		MentalHealth: []entity.MentalHealth{
+	// 			{
+	// 				AvgFeel:              weightedAvgFeel,
+	// 				TotalMentalHealthLog: 1,
+	// 			},
+	// 		},
+	// 		PhysicalHealth: []entity.PhysicalHealth{
+	// 			{
+	// 				AvgPain:              logEntryData.PainLevel,
+	// 				TotalMentalHealthLog: 1,
+	// 			},
+	// 		},
+	// 	}
+
+	// 	_, err := yearlyInsightsColl.InsertOne(ctx, yearlyInsightsData)
+	// 	if err != nil {
+	// 		return c.Status(fiber.StatusInternalServerError).JSON(logEntry.GetLogEntryResDto{
+	// 			Status:  false,
+	// 			Message: "failed to insert new Yearly Insights document " + err.Error(),
+	// 		})
+	// 	}
+	// }
+
 	return c.Status(fiber.StatusOK).JSON(logEntry.GetLogEntryResDto{
 		Status:  true,
 		Message: "Data inserted successfully",
