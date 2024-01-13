@@ -50,11 +50,11 @@ func WeeklyInsights(c *fiber.Ctx) error {
 }
 
 var mapFeel = map[string]int{
-	"In Crisis":  -1,
-	"Struggling": -2,
-	"Surviving":  -3,
-	"Thriving":   -4,
-	"Excelling":  -5,
+	"In Crisis":  1,
+	"Struggling": 2,
+	"Surviving":  3,
+	"Thriving":   4,
+	"Excelling":  5,
 }
 
 func MentalHealthInsightWeeksData(c *fiber.Ctx) ([]logEntry.MentalHealthRes, error) {
