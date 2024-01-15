@@ -37,15 +37,15 @@ func FetchFutureAppointments(c *fiber.Ctx) error {
 	}
 
 	// Format the current time using "2006-01-02T15:04:05" layout
-	currentTimeFormatted := time.Now().UTC().Format("2006-01-02T15:04:05")
+	currentTimeNow := time.Now().UTC()
 
 	filter := bson.M{
 		"isDeleted": false,
 		"userId":    userObjID,
-		"when":      bson.M{"$lt": currentTimeFormatted},
+		"when":      bson.M{"$gt": currentTimeNow},
 	}
 
-	fmt.Println(filter)
+	fmt.Println("Filter:", filter)
 
 	data, _ := json.Marshal(filter)
 	fmt.Println(string(data))

@@ -857,6 +857,9 @@ const docTemplate = `{
                 "notes": {
                     "type": "string"
                 },
+                "numberCount": {
+                    "type": "integer"
+                },
                 "painLevel": {
                     "type": "integer"
                 },
@@ -939,6 +942,9 @@ const docTemplate = `{
                 },
                 "notes": {
                     "type": "string"
+                },
+                "numberCount": {
+                    "type": "integer"
                 },
                 "updatedAt": {
                     "type": "string"
@@ -1063,6 +1069,9 @@ const docTemplate = `{
                 "notes": {
                     "type": "string"
                 },
+                "numberCount": {
+                    "type": "integer"
+                },
                 "painLevel": {
                     "type": "integer"
                 },
@@ -1106,6 +1115,9 @@ const docTemplate = `{
                 },
                 "notes": {
                     "type": "string"
+                },
+                "numberCount": {
+                    "type": "integer"
                 },
                 "painLevel": {
                     "type": "integer"
