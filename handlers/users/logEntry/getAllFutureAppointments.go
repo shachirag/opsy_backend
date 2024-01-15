@@ -42,7 +42,7 @@ func FetchFutureAppointments(c *fiber.Ctx) error {
 	filter := bson.M{
 		"isDeleted": false,
 		"userId":    userObjID,
-		"when":      bson.M{"$gt": currentTimeFormatted},
+		"when":      bson.M{"$lt": currentTimeFormatted},
 	}
 
 	fmt.Println(filter)
@@ -79,11 +79,11 @@ func FetchFutureAppointments(c *fiber.Ctx) error {
 			WhatItIsFor: logEntryEntity.WhatItIsFor,
 			Alert:       logEntryEntity.Alert,
 			UpdatedAt:   logEntryEntity.UpdatedAt,
+			NumberCount: logEntryEntity.NumberCount,
 			CreatedAt:   logEntryEntity.CreatedAt,
 		})
 	}
 
-	// Check if the result set is empty
 	if len(logEntryData) == 0 {
 		return c.Status(fiber.StatusOK).JSON(logEntry.FutureAppointmentDto{
 			Status:  false,

@@ -33,6 +33,7 @@ type FutureAppointmentRes struct {
 	When        time.Time          `json:"when" bson:"when"`
 	WhatItIsFor string             `json:"whatItIsFor" bson:"whatItIsFor"`
 	Alert       string             `json:"alert" bson:"alert"`
+	NumberCount int64              `json:"numberCount" bson:"numberCount"`
 	CreatedAt   time.Time          `json:"createdAt" bson:"createdAt"`
 	UpdatedAt   time.Time          `json:"updatedAt" bson:"updatedAt"`
 }

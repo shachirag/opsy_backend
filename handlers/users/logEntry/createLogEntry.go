@@ -8,7 +8,9 @@ import (
 	"time"
 
 	"github.com/gofiber/fiber/v2"
+	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
+	"go.mongodb.org/mongo-driver/mongo"
 )
 
 var ctx = context.Background()
@@ -23,7 +25,8 @@ var ctx = context.Background()
 func CreateLogEntry(c *fiber.Ctx) error {
 	var (
 		logEntryColl = database.GetCollection("logEntry")
-		data logEntry.LogEntryReqDto
+		data         logEntry.LogEntryReqDto
+		logEntryData entity.LogEntryEntity
 	)
 
 	err := c.BodyParser(&data)
@@ -44,33 +47,17 @@ func CreateLogEntry(c *fiber.Ctx) error {
 
 	id := primitive.NewObjectID()
 
-	// Get NumberCount from query parameter or use the one from the request body
-	numberCountStr := c.Query("numberCount")
-	var numberCount int
-	if numberCountStr != "" {
-		numberCount, err = strconv.Atoi(numberCountStr)
-		if err != nil {
-			return c.Status(400).JSON(logEntry.GetLogEntryResDto{
+	count, err := logEntryColl.CountDocuments(ctx, bson.M{"isDeleted": false})
+	if err != nil {
+		if err != mongo.ErrNoDocuments {
+			return c.Status(fiber.StatusInternalServerError).JSON(logEntry.GetLogEntryResDto{
 				Status:  false,
-				Message: "Invalid numberCount value",
+				Message: "Error getting count : " + err.Error(),
 			})
 		}
-	} else {
-		// If not provided in the query parameter, use the one from the request body
-		numberCount = data.NumberCount
 	}
 
-	// Calculate NumberCount by querying the database
-	count, err := calculateNumberCount(data.UserId)
-	if err != nil {
-		return c.Status(fiber.StatusInternalServerError).JSON(logEntry.GetLogEntryResDto{
-			Status:  false,
-			Message: "failed to get count from Database " + err.Error(),
-		})
-	}
-
-
-	logEntryData := entity.LogEntryEntity{
+	logEntryData = entity.LogEntryEntity{
 		Id:          id,
 		Type:        data.Type,
 		IsDeleted:   false,
@@ -84,7 +71,7 @@ func CreateLogEntry(c *fiber.Ctx) error {
 		Alert:       data.Alert,
 		CreatedAt:   time.Now().UTC(),
 		UpdatedAt:   time.Now().UTC(),
-		NumberCount: data.NumberCount,
+		NumberCount: count + 1,
 	}
 
 	_, err = logEntryColl.InsertOne(ctx, logEntryData)
@@ -107,6 +94,7 @@ func CreateLogEntry(c *fiber.Ctx) error {
 			PainLevel:   data.PainLevel,
 			WhatItIsFor: data.WhatItIsFor,
 			Alert:       data.Alert,
+			NumberCount: count + 1,
 			CreatedAt:   time.Now().UTC(),
 			UpdatedAt:   time.Now().UTC(),
 		},

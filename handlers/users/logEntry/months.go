@@ -94,6 +94,7 @@ func Months(c *fiber.Ctx) error {
 			PainLevel:   logEntryEntity.PainLevel,
 			WhatItIsFor: logEntryEntity.WhatItIsFor,
 			Feel:        logEntryEntity.Feel,
+			NumberCount: logEntryEntity.NumberCount,
 			Alert:       logEntryEntity.Alert,
 			CreatedAt:   logEntryEntity.CreatedAt,
 			UpdatedAt:   logEntryEntity.UpdatedAt,

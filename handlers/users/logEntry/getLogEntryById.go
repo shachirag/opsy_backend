@@ -4,6 +4,7 @@ import (
 	"opsy_backend/database"
 	"opsy_backend/dto/users/logEntry"
 	"opsy_backend/entity"
+
 	"github.com/gofiber/fiber/v2"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
@@ -44,7 +45,7 @@ func FetchLogEntryById(c *fiber.Ctx) error {
 
 	logentryColl := database.GetCollection("logEntry")
 
-	err = logentryColl.FindOne(ctx, bson.M{"_id": objId,}).Decode(&logentry)
+	err = logentryColl.FindOne(ctx, bson.M{"_id": objId}).Decode(&logentry)
 	if err != nil {
 		if err == mongo.ErrNoDocuments {
 			return c.Status(fiber.StatusNotFound).JSON(logEntry.LogentryResDto{
@@ -68,6 +69,7 @@ func FetchLogEntryById(c *fiber.Ctx) error {
 		PainLevel:   logentry.PainLevel,
 		WhatItIsFor: logentry.WhatItIsFor,
 		Alert:       logentry.Alert,
+		NumberCount: logentry.NumberCount,
 		CreatedAt:   logentry.CreatedAt,
 		UpdatedAt:   logentry.UpdatedAt,
 	}

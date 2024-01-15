@@ -19,6 +19,7 @@ type CategoriesRes struct {
 	Notes       string             `json:"notes" bson:"notes"`
 	Ways        []string           `json:"ways" bson:"ways"`
 	When        time.Time          `json:"when" bson:"when"`
+	NumberCount int64              `json:"numberCount" bson:"numberCount"`
 	PainLevel   int32              `json:"painLevel" bson:"painLevel"`
 	WhatItIsFor string             `json:"whatItIsFor" bson:"whatItIsFor"`
 	Alert       string             `json:"alert" bson:"alert"`
@@ -27,10 +28,6 @@ type CategoriesRes struct {
 }
 
 type DeleteResDto struct {
-	Status  bool            `json:"status"`
-	Message string          `json:"message"`
+	Status  bool   `json:"status"`
+	Message string `json:"message"`
 }
-
-
-
-

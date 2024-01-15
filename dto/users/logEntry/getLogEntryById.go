@@ -7,8 +7,8 @@ import (
 )
 
 type LogentryResDto struct {
-	Status  bool          `json:"status"`
-	Message string        `json:"message"`
+	Status  bool         `json:"status"`
+	Message string       `json:"message"`
 	Data    *LogentryRes `json:"data"`
 }
 
@@ -21,6 +21,7 @@ type LogentryRes struct {
 	Ways        []string           `json:"ways" bson:"ways"`
 	When        time.Time          `json:"when" bson:"when"`
 	PainLevel   int32              `json:"painLevel" bson:"painlevel"`
+	NumberCount int64              `json:"numberCount" bson:"numberCount"`
 	WhatItIsFor string             `json:"whatItIsFor" bson:"whatItIsFor"`
 	Alert       string             `json:"alert" bson:"alert"`
 	CreatedAt   time.Time          `json:"createdAt" bson:"createdAt"`
