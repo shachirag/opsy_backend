@@ -24,6 +24,7 @@ type LogEntryRes struct {
 	Alert       string             `json:"alert" bson:"alert"`
 	CreatedAt   time.Time          `json:"createdAt" bson:"createdAt"`
 	UpdatedAt   time.Time          `json:"updatedAt" bson:"updatedAt"`
+	NumberCount int32              `json:"numberCount" bson:"numberCount"`
 }
 
 type LogEntryReqDto struct {

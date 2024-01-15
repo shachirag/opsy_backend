@@ -17,7 +17,8 @@ type LogEntryEntity struct {
 	PainLevel   int32              `json:"painLevel" bson:"painlevel"`
 	WhatItIsFor string             `json:"whatItIsFor" bson:"whatItIsFor"`
 	Alert       string             `json:"alert" bson:"alert"`
-	UserId          primitive.ObjectID `json:"userId" bson:"userId"`
+	UserId      primitive.ObjectID `json:"userId" bson:"userId"`
 	CreatedAt   time.Time          `json:"createdAt" bson:"createdAt"`
 	UpdatedAt   time.Time          `json:"updatedAt" bson:"updatedAt"`
+	NumberCount int32              `json:"numberCount" bson:"numberCount"`
 }
