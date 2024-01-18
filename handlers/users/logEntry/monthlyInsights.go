@@ -47,7 +47,7 @@ func MonthlyInsights(c *fiber.Ctx) error {
 	}
 
 	allDates := make(map[string]bool)
-	for d := startDate; !d.After(endDate); d = d.AddDate(0, 0, 1) {
+	for d := startDate.AddDate(0,0,1); !d.After(endDate); d = d.AddDate(0, 0, 2) {
 		allDates[d.Format("2006-01-02")] = true
 	}
 
