@@ -243,7 +243,7 @@ func PhysicalHealthInsightWeeksData(c *fiber.Ctx) ([]logEntry.PhysicalHealthRes,
 				Date:         data.Date,
 				Day:          data.Day,
 				AvgPainLevel: data.AvgPainLevel,
-			})
+			}) 
 			dateSet[data.Date] = true
 		}
 	}

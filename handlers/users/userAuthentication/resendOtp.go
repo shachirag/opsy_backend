@@ -39,7 +39,7 @@ func ResendOTP(c *fiber.Ctx) error {
 	}
 	smallEmail := strings.ToLower(data.Email)
 	// Find the existing OTP data for the provided email
-	err = otpColl.FindOne(ctx, bson.M{"email": smallEmail, "isDeleted": false}).Decode(&otpData)
+	err = otpColl.FindOne(ctx, bson.M{"email": smallEmail}).Decode(&otpData)
 	if err != nil {
 		if err == mongo.ErrNoDocuments {
 			return c.Status(fiber.StatusNotFound).JSON(userAuth.UserPasswordResDto{
