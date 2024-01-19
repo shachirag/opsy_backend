@@ -149,11 +149,11 @@ func MentalHealthInsightWeeksData(c *fiber.Ctx) ([]logEntry.MentalHealthRes, err
 		return dateI.Before(dateJ)
 	})
 
-	for i := range responseData {
-		if dayCount[i] != 0 {
-			responseData[i].AvgFeel *= 1
-		}
-	}
+	// for i := range responseData {
+	// 	if dayCount[i] != 0 {
+	// 		responseData[i].AvgFeel *= 1
+	// 	}
+	// }
 
 	return responseData, nil
 }
@@ -228,7 +228,7 @@ func PhysicalHealthInsightWeeksData(c *fiber.Ctx) ([]logEntry.PhysicalHealthRes,
 			dayData[dayIndex].AvgPainLevel = new(float64)
 			*dayData[dayIndex].AvgPainLevel = float64(entry.PainLevel)
 		} else {
-			*dayData[dayIndex].AvgPainLevel = (*avg*float64(dayCount[dayIndex]) + float64(entry.PainLevel)) / float64(dayCount[dayIndex]+1)
+			*dayData[dayIndex].AvgPainLevel = ((*avg)*float64(dayCount[dayIndex]) + float64(entry.PainLevel)) / float64(dayCount[dayIndex]+1)
 		}
 
 		dayData[dayIndex].Day = entry.When.Weekday().String()[:3]

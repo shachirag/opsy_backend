@@ -40,11 +40,13 @@ func MonthlyInsights(c *fiber.Ctx) error {
 	if err != nil {
 		return err
 	}
+	fmt.Printf("Mental Health Data: %v\n", mentalHealthData)
 
 	physicalHealthData, err := PhysicalHealthInsightMonthsData(c, startDate, endDate)
 	if err != nil {
 		return err
 	}
+	fmt.Printf("Mental Health Data: %v\n", physicalHealthData)
 
 	allDates := make(map[string]bool)
 	for d := startDate.AddDate(0,0,1); !d.After(endDate); d = d.AddDate(0, 0, 2) {
@@ -69,7 +71,7 @@ func MonthlyInsights(c *fiber.Ctx) error {
 	for date := range allDates {
 		physicalHealthData = append(physicalHealthData, logEntry.MonthlyPhysicalHealthRes{
 			Date:         date,
-			AvgPainLevel: new(float64), // Initializing with 0 value pointer
+			AvgPainLevel: new(float64), 
 		})
 	}
 
@@ -147,15 +149,22 @@ func MentalHealthInsightMonthsData(c *fiber.Ctx, startDate, endDate time.Time) (
 	var monthlyData []logEntry.MonthlyMentalHealthRes
 
 	for date, values := range dailyData {
-		dayIndex := int(startDate.AddDate(0, 0, 0).Weekday())
-		dateTime, _ := time.Parse("2006-01-02", date)
-		avg := values[dayIndex] / float64(dayCount[date])
+        dateTime, _ := time.Parse("2006-01-02", date)
+        total := 0.0
+        count := 0
 
-		monthlyData = append(monthlyData, logEntry.MonthlyMentalHealthRes{
-			Date:    dateTime.Format("2006-01-02"),
-			AvgFeel: math.Round(math.Abs(avg)*100) / 100,
-		})
-	}
+        for _, value := range values {
+            total += value
+            count++
+        }
+
+        avg := total / float64(count)
+
+        monthlyData = append(monthlyData, logEntry.MonthlyMentalHealthRes{
+            Date:    dateTime.Format("2006-01-02"),
+            AvgFeel: math.Round(math.Abs(avg)*100) / 100,
+        })
+    }
 
 	return monthlyData, nil
 }
@@ -211,17 +220,24 @@ func PhysicalHealthInsightMonthsData(c *fiber.Ctx, startDate, endDate time.Time)
 
 	var monthlyData []logEntry.MonthlyPhysicalHealthRes
 
-	// Calculate average pain level for each day in the month
-	for date, values := range dailyData {
-		dayIndex := int(startDate.AddDate(0, 0, 0).Weekday())
-		dateTime, _ := time.Parse("2006-01-02", date)
-		avg := values[dayIndex] / float64(dayCount[date])
+	 // Calculate average pain level for each day in the month
+	 for date, values := range dailyData {
+        dateTime, _ := time.Parse("2006-01-02", date)
+        total := 0.0
+        count := 0
 
-		monthlyData = append(monthlyData, logEntry.MonthlyPhysicalHealthRes{
-			Date:         dateTime.Format("2006-01-02"),
-			AvgPainLevel: &avg,
-		})
-	}
+        for _, value := range values {
+            total += value
+            count++
+        }
+
+        avg := total / float64(count)
+
+        monthlyData = append(monthlyData, logEntry.MonthlyPhysicalHealthRes{
+            Date:         dateTime.Format("2006-01-02"),
+            AvgPainLevel: &avg,
+        })
+    }
 
 	return monthlyData, nil
 }
