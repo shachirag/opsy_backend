@@ -83,6 +83,7 @@ func MentalHealthInsightWeeksData(c *fiber.Ctx) ([]logEntry.MentalHealthRes, err
 	}
 
 	filter := bson.M{
+		"type":"mentalhealth",
 		"isDeleted": false,
 		"when":      bson.M{"$gte": startDate, "$lte": endOfDay},
 		"userId":    userObjID,
@@ -183,6 +184,7 @@ func PhysicalHealthInsightWeeksData(c *fiber.Ctx) ([]logEntry.PhysicalHealthRes,
 	}
 
 	filter := bson.M{
+		"type":"physicalhealth",
 		"isDeleted": false,
 		"when":      bson.M{"$gte": startDate, "$lte": endOfDay},
 		"userId":    userObjID,
