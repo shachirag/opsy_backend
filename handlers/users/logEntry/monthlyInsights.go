@@ -24,7 +24,14 @@ import (
 // @Param monthYear query string true "Month and Year (MM-YYYY)"
 // @Success 200 {object} logEntry.MonthlyInsightsResDto
 // @Router /user/monthly-insights [get]
-func DailyInsights(c *fiber.Ctx) error {
+// Wrapper function for DailyInsights with onlyEvenDates parameter
+func DailyInsightsHandler(c *fiber.Ctx) error {
+	onlyEvenDates := false
+
+	return DailyInsights(c, onlyEvenDates)
+}
+
+func DailyInsights(c *fiber.Ctx, onlyEvenDates bool) error {
 	monthYear := c.Query("monthYear")
 	parsedMonthYear, err := time.Parse("01-2006", monthYear)
 	if err != nil {
@@ -34,13 +41,13 @@ func DailyInsights(c *fiber.Ctx) error {
 	startDate := time.Date(parsedMonthYear.Year(), parsedMonthYear.Month(), 1, 0, 0, 0, 0, time.UTC)
 	endDate := startDate.AddDate(0, 1, 0).Add(-time.Nanosecond)
 
-	mentalHealthData, err := MentalHealthInsightDaysData(c, startDate, endDate)
+	mentalHealthData, err := MentalHealthInsightDaysData(c, startDate, endDate, onlyEvenDates)
 	if err != nil {
 		return err
 	}
 	fmt.Printf("Mental Health Data: %v\n", mentalHealthData)
 
-	physicalHealthData, err := PhysicalHealthInsightDaysData(c, startDate, endDate)
+	physicalHealthData, err := PhysicalHealthInsightDaysData(c, startDate, endDate, onlyEvenDates)
 	if err != nil {
 		return err
 	}
@@ -58,7 +65,7 @@ func DailyInsights(c *fiber.Ctx) error {
 	return c.Status(fiber.StatusOK).JSON(response)
 }
 
-func MentalHealthInsightDaysData(c *fiber.Ctx, startDate, endDate time.Time) ([]logEntry.MonthlyMentalHealthRes, error) {
+func MentalHealthInsightDaysData(c *fiber.Ctx, startDate, endDate time.Time, onlyEvenDates bool) ([]logEntry.MonthlyMentalHealthRes, error) {
 	var (
 		logEntryColl = database.GetCollection("logEntry")
 		ctx          = c.Context()
@@ -94,6 +101,13 @@ func MentalHealthInsightDaysData(c *fiber.Ctx, startDate, endDate time.Time) ([]
 	for _, entry := range logEntryData {
 		dateKey := entry.When.Format("2006-01-02")
 
+		if onlyEvenDates {
+			day := entry.When.Day()
+			if day%2 != 0 {
+				continue
+			}
+		}
+
 		if _, ok := dailyData[dateKey]; !ok {
 			dailyData[dateKey] = logEntry.MonthlyMentalHealthRes{
 				Date:    dateKey,
@@ -106,7 +120,7 @@ func MentalHealthInsightDaysData(c *fiber.Ctx, startDate, endDate time.Time) ([]
 		dailyData[dateKey] = temp
 	}
 
-	for day := startDate; day.Before(endDate); day = day.AddDate(0, 0, 1) {
+	for day := startDate; day.Before(endDate); day = day.AddDate(0, 0, 2) {
 		dateKey := day.Format("2006-01-02")
 		if _, ok := dailyData[dateKey]; !ok {
 			dailyData[dateKey] = logEntry.MonthlyMentalHealthRes{
@@ -139,7 +153,7 @@ func MentalHealthInsightDaysData(c *fiber.Ctx, startDate, endDate time.Time) ([]
 	return dailyMentalHealthData, nil
 }
 
-func PhysicalHealthInsightDaysData(c *fiber.Ctx, startDate, endDate time.Time) ([]logEntry.MonthlyPhysicalHealthRes, error) {
+func PhysicalHealthInsightDaysData(c *fiber.Ctx, startDate, endDate time.Time, onlyEvenDates bool) ([]logEntry.MonthlyPhysicalHealthRes, error) {
 	var (
 		logEntryColl = database.GetCollection("logEntry")
 		ctx          = c.Context()
@@ -175,6 +189,13 @@ func PhysicalHealthInsightDaysData(c *fiber.Ctx, startDate, endDate time.Time) (
 	for _, entry := range logEntryData {
 		dateKey := entry.When.Format("2006-01-02")
 
+		if onlyEvenDates {
+			day := entry.When.Day()
+			if day%2 != 0 {
+				continue
+			}
+		}
+
 		if _, ok := dailyData[dateKey]; !ok {
 			dailyData[dateKey] = logEntry.MonthlyPhysicalHealthRes{
 				Date:         dateKey,
@@ -187,7 +208,7 @@ func PhysicalHealthInsightDaysData(c *fiber.Ctx, startDate, endDate time.Time) (
 		dailyData[dateKey] = temp
 	}
 
-	for day := startDate; day.Before(endDate); day = day.AddDate(0, 0, 1) {
+	for day := startDate; day.Before(endDate); day = day.AddDate(0, 0, 2) {
 		dateKey := day.Format("2006-01-02")
 		if _, ok := dailyData[dateKey]; !ok {
 			dailyData[dateKey] = logEntry.MonthlyPhysicalHealthRes{
