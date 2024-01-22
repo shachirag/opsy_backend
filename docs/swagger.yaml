@@ -231,6 +231,40 @@ definitions:
       day:
         type: string
     type: object
+  logEntry.MonthlyInsightsData:
+    properties:
+      mentalHealth:
+        items:
+          $ref: '#/definitions/logEntry.MonthlyMentalHealthRes'
+        type: array
+      physicalHealth:
+        items:
+          $ref: '#/definitions/logEntry.MonthlyPhysicalHealthRes'
+        type: array
+    type: object
+  logEntry.MonthlyInsightsResDto:
+    properties:
+      data:
+        $ref: '#/definitions/logEntry.MonthlyInsightsData'
+      message:
+        type: string
+      status:
+        type: boolean
+    type: object
+  logEntry.MonthlyMentalHealthRes:
+    properties:
+      avgFeel:
+        type: number
+      date:
+        type: string
+    type: object
+  logEntry.MonthlyPhysicalHealthRes:
+    properties:
+      avgPainLevel:
+        type: number
+      date:
+        type: string
+    type: object
   logEntry.PhysicalHealthRes:
     properties:
       avgPainLevel:
@@ -724,8 +758,8 @@ paths:
     get:
       consumes:
       - application/json
-      description: Retrieves mental health and physical health data for a specified
-        month
+      description: Retrieves mental health and physical health data for each date
+        within a specified month
       parameters:
       - description: user ID
         in: query
@@ -743,8 +777,8 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/logEntry.InsightsResDto'
-      summary: Fetch monthly insights data
+            $ref: '#/definitions/logEntry.MonthlyInsightsResDto'
+      summary: Fetch daily insights data for a specified month
       tags:
       - logEntry
   /user/months:

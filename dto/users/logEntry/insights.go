@@ -24,9 +24,9 @@ type InsightsData struct {
 }
 
 type PhysicalHealthRes struct {
-	Date         string   `json:"date" bson:"date"`
-	Day          string   `json:"day" bson:"day"`
-	AvgPainLevel *float64 `json:"avgPainLevel" bson:"avgPainLevel"`
+	Date         string  `json:"date" bson:"date"`
+	Day          string  `json:"day" bson:"day"`
+	AvgPainLevel float64 `json:"avgPainLevel" bson:"avgPainLevel"`
 }
 
 type MentalHealthRes struct {
@@ -47,8 +47,8 @@ type MonthlyInsightsData struct {
 }
 
 type MonthlyPhysicalHealthRes struct {
-	Date         string   `json:"date" bson:"date"`
-	AvgPainLevel *float64 `json:"avgPainLevel,omitempty" bson:"avgPainLevel,omitempty"`
+	Date         string  `json:"date" bson:"date"`
+	AvgPainLevel float64 `json:"avgPainLevel" bson:"avgPainLevel"`
 }
 
 type MonthlyMentalHealthRes struct {
@@ -76,14 +76,6 @@ type YearlyMentalHealthRes struct {
 	AvgFeel              int32 `json:"avgFeel" bson:"avgFeel"`
 	TotalMentalHealthLog int64 `json:"totalMentalHealthLog" bson:"totalMentalHealthLog"`
 }
-
-
-
-
-
-
-
-
 
 type YearlyMentalHealthInsightsResData struct {
 	Month   string  `json:"month"`

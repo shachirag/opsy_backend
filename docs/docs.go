@@ -426,7 +426,7 @@ const docTemplate = `{
         },
         "/user/monthly-insights": {
             "get": {
-                "description": "Retrieves mental health and physical health data for a specified month",
+                "description": "Retrieves mental health and physical health data for each date within a specified month",
                 "consumes": [
                     "application/json"
                 ],
@@ -436,7 +436,7 @@ const docTemplate = `{
                 "tags": [
                     "logEntry"
                 ],
-                "summary": "Fetch monthly insights data",
+                "summary": "Fetch daily insights data for a specified month",
                 "parameters": [
                     {
                         "type": "string",
@@ -457,7 +457,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/logEntry.InsightsResDto"
+                            "$ref": "#/definitions/logEntry.MonthlyInsightsResDto"
                         }
                     }
                 }
@@ -1166,6 +1166,59 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "day": {
+                    "type": "string"
+                }
+            }
+        },
+        "logEntry.MonthlyInsightsData": {
+            "type": "object",
+            "properties": {
+                "mentalHealth": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/logEntry.MonthlyMentalHealthRes"
+                    }
+                },
+                "physicalHealth": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/logEntry.MonthlyPhysicalHealthRes"
+                    }
+                }
+            }
+        },
+        "logEntry.MonthlyInsightsResDto": {
+            "type": "object",
+            "properties": {
+                "data": {
+                    "$ref": "#/definitions/logEntry.MonthlyInsightsData"
+                },
+                "message": {
+                    "type": "string"
+                },
+                "status": {
+                    "type": "boolean"
+                }
+            }
+        },
+        "logEntry.MonthlyMentalHealthRes": {
+            "type": "object",
+            "properties": {
+                "avgFeel": {
+                    "type": "number"
+                },
+                "date": {
+                    "type": "string"
+                }
+            }
+        },
+        "logEntry.MonthlyPhysicalHealthRes": {
+            "type": "object",
+            "properties": {
+                "avgPainLevel": {
+                    "type": "number"
+                },
+                "date": {
                     "type": "string"
                 }
             }
