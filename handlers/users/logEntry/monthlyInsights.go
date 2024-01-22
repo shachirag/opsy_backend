@@ -26,7 +26,7 @@ import (
 // @Router /user/monthly-insights [get]
 // Wrapper function for DailyInsights with onlyEvenDates parameter
 func DailyInsightsHandler(c *fiber.Ctx) error {
-	onlyEvenDates := false
+	onlyEvenDates := true
 
 	return DailyInsights(c, onlyEvenDates)
 }
