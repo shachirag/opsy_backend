@@ -25,7 +25,7 @@ import (
 // @Success 200 {object} logEntry.MonthlyInsightsResDto
 // @Router /user/monthly-insights [get]
 // Wrapper function for DailyInsights with onlyEvenDates parameter
-func DailyInsightsHandler(c *fiber.Ctx) error {
+func MonthlyInsights(c *fiber.Ctx) error {
 	onlyEvenDates := true
 
 	return DailyInsights(c, onlyEvenDates)
@@ -38,7 +38,7 @@ func DailyInsights(c *fiber.Ctx, onlyEvenDates bool) error {
 		return fmt.Errorf("Invalid monthYear format: %s", err.Error())
 	}
 
-	startDate := time.Date(parsedMonthYear.Year(), parsedMonthYear.Month(), 1, 0, 0, 0, 0, time.UTC)
+	startDate := time.Date(parsedMonthYear.Year(), parsedMonthYear.Month(), 2, 0, 0, 0, 0, time.UTC)
 	endDate := startDate.AddDate(0, 1, 0).Add(-time.Nanosecond)
 
 	mentalHealthData, err := MentalHealthInsightDaysData(c, startDate, endDate, onlyEvenDates)
