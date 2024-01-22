@@ -112,6 +112,7 @@ func PhysicalHealthInsightMonthsData1(c *fiber.Ctx, startDate, endDate time.Time
 	}
 
 	filter := bson.M{
+		"type":      "Physical Health",
 		"isDeleted": false,
 		"when":      bson.M{"$gte": startDate, "$lte": endDate},
 		"userId":    userObjID,
@@ -179,6 +180,7 @@ func MentalHealthInsightMonthsData1(c *fiber.Ctx, startDate, endDate time.Time) 
 	}
 
 	filter := bson.M{
+		"type":      "Mental Health",
 		"isDeleted": false,
 		"when":      bson.M{"$gte": startDate, "$lte": endDate},
 		"userId":    userObjID,
