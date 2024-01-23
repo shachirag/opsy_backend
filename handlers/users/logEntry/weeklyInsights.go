@@ -215,28 +215,30 @@ func PhysicalHealthInsightWeeksData(c *fiber.Ctx) ([]logEntry.PhysicalHealthRes,
 
 	dayData := make([]logEntry.PhysicalHealthRes, 7)
 
-	for date, dayIndex := range dateIndexMap {
-		idx := dayIndex % 7
-		dayData[idx].Day = time.Weekday(idx).String()[:3]
-		dayData[idx].Date = date
+	for i := 0; i < daysInRange; i++ {
+		date := startDate.AddDate(0, 0, i).Format("2006-01-02")
+		dayIndex := int(startDate.AddDate(0, 0, i).Weekday())
+		
+		dayData[dayIndex].Day = time.Weekday(dayIndex).String()[:3]
+		dayData[dayIndex].Date = date
 	}
-
+	
 	dayCount := make([]int, 7)
+
 	for _, entry := range logEntryData {
 		dayIndex := int(entry.When.Weekday())
 		avg := dayData[dayIndex].AvgPainLevel
-
-		// avg := dayData[dayIndex].AvgPainLevel
-
-		if dayCount[dayIndex] == 0 {
-			dayData[dayIndex].AvgPainLevel = float64(entry.PainLevel)
-		} else {
-			sum := avg * float64(dayCount[dayIndex])
-			dayData[dayIndex].AvgPainLevel = (sum + float64(entry.PainLevel)) / float64(dayCount[dayIndex]+1)
-		}
-
+	
+		dayData[dayIndex].AvgPainLevel = (avg*float64(dayCount[dayIndex]) + float64(entry.PainLevel)) / float64(dayCount[dayIndex]+1)
 		dayData[dayIndex].Day = entry.When.Weekday().String()[:3]
 		dayCount[dayIndex]++
+	}
+	
+
+	for i, count := range dayCount {
+		if count == 0 {
+			dayData[i].AvgPainLevel = 0.0
+		}
 	}
 
 	responseData := make([]logEntry.PhysicalHealthRes, 0)
@@ -246,11 +248,12 @@ func PhysicalHealthInsightWeeksData(c *fiber.Ctx) ([]logEntry.PhysicalHealthRes,
 			responseData = append(responseData, logEntry.PhysicalHealthRes{
 				Date:         data.Date,
 				Day:          data.Day,
-				AvgPainLevel: 0.0,
+				AvgPainLevel: math.Round(math.Abs(data.AvgPainLevel)*100) / 100, // Round to 2 decimal places
 			})
 			dateSet[data.Date] = true
 		}
 	}
+	
 
 	sort.Slice(responseData, func(i, j int) bool {
 		dateI, _ := time.Parse("2006-01-02", responseData[i].Date)
