@@ -39,19 +39,19 @@ func DailyInsights(c *fiber.Ctx, onlyEvenDates bool) error {
 	}
 
 	startDate := time.Date(parsedMonthYear.Year(), parsedMonthYear.Month(), 2, 0, 0, 0, 0, time.UTC)
-	endDate := startDate.AddDate(0, 1, 0).Add(-time.Nanosecond)
+	endDate := startDate.AddDate(0, 1, -1).Add(-time.Nanosecond)
 
 	mentalHealthData, err := MentalHealthInsightDaysData(c, startDate, endDate, onlyEvenDates)
 	if err != nil {
 		return err
 	}
-	fmt.Printf("Mental Health Data: %v\n", mentalHealthData)
+	// fmt.Printf("Mental Health Data: %v\n", mentalHealthData)
 
 	physicalHealthData, err := PhysicalHealthInsightDaysData(c, startDate, endDate, onlyEvenDates)
 	if err != nil {
 		return err
 	}
-	fmt.Printf("Physical Health Data: %v\n", physicalHealthData)
+	// fmt.Printf("Physical Health Data: %v\n", physicalHealthData)
 
 	response := logEntry.MonthlyInsightsResDto{
 		Status:  true,
