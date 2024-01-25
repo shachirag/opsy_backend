@@ -66,177 +66,193 @@ func DailyInsights(c *fiber.Ctx, onlyEvenDates bool) error {
 }
 
 func MentalHealthInsightDaysData(c *fiber.Ctx, startDate, endDate time.Time, onlyEvenDates bool) ([]logEntry.MonthlyMentalHealthRes, error) {
-	var (
-		logEntryColl = database.GetCollection("logEntry")
-		ctx          = c.Context()
-	)
+    var (
+        logEntryColl = database.GetCollection("logEntry")
+        ctx          = c.Context()
+    )
 
-	userId := c.Query("userId")
-	userObjID, err := primitive.ObjectIDFromHex(userId)
-	if err != nil {
-		return nil, fmt.Errorf("invalid object id: %s", err.Error())
-	}
+    userId := c.Query("userId")
+    userObjID, err := primitive.ObjectIDFromHex(userId)
+    if err != nil {
+        return nil, fmt.Errorf("invalid object id: %s", err.Error())
+    }
 
-	filter := bson.M{
-		"type":      "Mental Health",
-		"isDeleted": false,
-		"when":      bson.M{"$gte": startDate, "$lte": endDate},
-		"userId":    userObjID,
-	}
-	sortOptions := options.Find().SetSort(bson.M{"when": 1})
+    filter := bson.M{
+        "type":      "Mental Health",
+        "isDeleted": false,
+        "when":      bson.M{"$gte": startDate, "$lte": endDate},
+        "userId":    userObjID,
+    }
+    sortOptions := options.Find().SetSort(bson.M{"when": 1})
 
-	cursor, err := logEntryColl.Find(ctx, filter, sortOptions)
-	if err != nil {
-		return nil, fmt.Errorf("Failed to fetch data: %s", err.Error())
-	}
-	defer cursor.Close(ctx)
+    cursor, err := logEntryColl.Find(ctx, filter, sortOptions)
+    if err != nil {
+        return nil, fmt.Errorf("Failed to fetch data: %s", err.Error())
+    }
+    defer cursor.Close(ctx)
 
-	var logEntryData []entity.LogEntryEntity
-	if err := cursor.All(ctx, &logEntryData); err != nil {
-		return nil, fmt.Errorf("Failed to decode data: %s", err.Error())
-	}
+    var logEntryData []entity.LogEntryEntity
+    if err := cursor.All(ctx, &logEntryData); err != nil {
+        return nil, fmt.Errorf("Failed to decode data: %s", err.Error())
+    }
 
-	dailyData := make(map[string]logEntry.MonthlyMentalHealthRes)
+    dailyData := make(map[string]logEntry.MonthlyMentalHealthRes)
 
-	for _, entry := range logEntryData {
-		dateKey := entry.When.Format("2006-01-02")
+    for _, entry := range logEntryData {
+        dateKey := entry.When.Format("2006-01-02")
 
-		if onlyEvenDates {
-			day := entry.When.Day()
-			if day%2 != 0 {
-				continue
-			}
-		}
+        if onlyEvenDates {
+            day := entry.When.Day()
+            if day%2 != 0 {
+                continue
+            }
+        }
 
-		if _, ok := dailyData[dateKey]; !ok {
-			dailyData[dateKey] = logEntry.MonthlyMentalHealthRes{
-				Date:    dateKey,
-				AvgFeel: 0,
-			}
-		}
+        if _, ok := dailyData[dateKey]; !ok {
+            dailyData[dateKey] = logEntry.MonthlyMentalHealthRes{
+                Date:    dateKey,
+                AvgFeel: 0,
+            }
+        }
 
-		temp := dailyData[dateKey]
-		temp.AvgFeel += float64(mapFeel[entry.Feel])
-		dailyData[dateKey] = temp
-	}
+        temp := dailyData[dateKey]
+        temp.AvgFeel += float64(mapFeel[entry.Feel])
+        dailyData[dateKey] = temp
+    }
 
-	for day := startDate; day.Before(endDate); day = day.AddDate(0, 0, 2) {
-		dateKey := day.Format("2006-01-02")
-		if _, ok := dailyData[dateKey]; !ok {
-			dailyData[dateKey] = logEntry.MonthlyMentalHealthRes{
-				Date:    dateKey,
-				AvgFeel: 0,
-			}
-		}
-	}
+    for day := startDate; day.Before(endDate); day = day.AddDate(0, 0, 2) {
+        dateKey := day.Format("2006-01-02")
+        if _, ok := dailyData[dateKey]; !ok {
+            dailyData[dateKey] = logEntry.MonthlyMentalHealthRes{
+                Date:    dateKey,
+                AvgFeel: 0,
+            }
+        }
+    }
 
-	var dailyMentalHealthData []logEntry.MonthlyMentalHealthRes
+    var dailyMentalHealthData []logEntry.MonthlyMentalHealthRes
 
-	for _, data := range dailyData {
-		total := data.AvgFeel
-		count := len(logEntryData)
+    for _, data := range dailyData {
+        total := data.AvgFeel
+        count := len(logEntryData)
 
-		avg := total / float64(count)
-		avg = math.Round(avg*100) / 100
-		dailyMentalHealthData = append(dailyMentalHealthData, logEntry.MonthlyMentalHealthRes{
-			Date:    data.Date,
-			AvgFeel: math.Round(math.Abs(avg)*100) / 100,
-		})
-	}
+        if count > 0 {
+            avg := total / float64(count)
+            avg = math.Round(avg*100) / 100
+            dailyMentalHealthData = append(dailyMentalHealthData, logEntry.MonthlyMentalHealthRes{
+                Date:    data.Date,
+                AvgFeel: math.Round(math.Abs(avg)*100) / 100,
+            })
+        } else {
+            // Handle the case when count is zero (no data available)
+            dailyMentalHealthData = append(dailyMentalHealthData, logEntry.MonthlyMentalHealthRes{
+                Date:    data.Date,
+                AvgFeel: 0,
+            })
+        }
+    }
 
-	sort.Slice(dailyMentalHealthData, func(i, j int) bool {
-		dateI, _ := time.Parse("2006-01-02", dailyMentalHealthData[i].Date)
-		dateJ, _ := time.Parse("2006-01-02", dailyMentalHealthData[j].Date)
-		return dateI.Before(dateJ)
-	})
+    sort.Slice(dailyMentalHealthData, func(i, j int) bool {
+        dateI, _ := time.Parse("2006-01-02", dailyMentalHealthData[i].Date)
+        dateJ, _ := time.Parse("2006-01-02", dailyMentalHealthData[j].Date)
+        return dateI.Before(dateJ)
+    })
 
-	return dailyMentalHealthData, nil
+    return dailyMentalHealthData, nil
 }
 
 func PhysicalHealthInsightDaysData(c *fiber.Ctx, startDate, endDate time.Time, onlyEvenDates bool) ([]logEntry.MonthlyPhysicalHealthRes, error) {
-	var (
-		logEntryColl = database.GetCollection("logEntry")
-		ctx          = c.Context()
-	)
+    var (
+        logEntryColl = database.GetCollection("logEntry")
+        ctx          = c.Context()
+    )
 
-	userId := c.Query("userId")
-	userObjID, err := primitive.ObjectIDFromHex(userId)
-	if err != nil {
-		return nil, fmt.Errorf("invalid object id: %s", err.Error())
-	}
+    userId := c.Query("userId")
+    userObjID, err := primitive.ObjectIDFromHex(userId)
+    if err != nil {
+        return nil, fmt.Errorf("invalid object id: %s", err.Error())
+    }
 
-	filter := bson.M{
-		"type":      "Physical Health",
-		"isDeleted": false,
-		"when":      bson.M{"$gte": startDate, "$lte": endDate},
-		"userId":    userObjID,
-	}
-	sortOptions := options.Find().SetSort(bson.M{"when": 1})
+    filter := bson.M{
+        "type":      "Physical Health",
+        "isDeleted": false,
+        "when":      bson.M{"$gte": startDate, "$lte": endDate},
+        "userId":    userObjID,
+    }
+    sortOptions := options.Find().SetSort(bson.M{"when": 1})
 
-	cursor, err := logEntryColl.Find(ctx, filter, sortOptions)
-	if err != nil {
-		return nil, fmt.Errorf("Failed to fetch data: %s", err.Error())
-	}
-	defer cursor.Close(ctx)
+    cursor, err := logEntryColl.Find(ctx, filter, sortOptions)
+    if err != nil {
+        return nil, fmt.Errorf("Failed to fetch data: %s", err.Error())
+    }
+    defer cursor.Close(ctx)
 
-	var logEntryData []entity.LogEntryEntity
-	if err := cursor.All(ctx, &logEntryData); err != nil {
-		return nil, fmt.Errorf("Failed to decode data: %s", err.Error())
-	}
+    var logEntryData []entity.LogEntryEntity
+    if err := cursor.All(ctx, &logEntryData); err != nil {
+        return nil, fmt.Errorf("Failed to decode data: %s", err.Error())
+    }
 
-	dailyData := make(map[string]logEntry.MonthlyPhysicalHealthRes)
+    dailyData := make(map[string]logEntry.MonthlyPhysicalHealthRes)
 
-	for _, entry := range logEntryData {
-		dateKey := entry.When.Format("2006-01-02")
+    for _, entry := range logEntryData {
+        dateKey := entry.When.Format("2006-01-02")
 
-		if onlyEvenDates {
-			day := entry.When.Day()
-			if day%2 != 0 {
-				continue
-			}
-		}
+        if onlyEvenDates {
+            day := entry.When.Day()
+            if day%2 != 0 {
+                continue
+            }
+        }
 
-		if _, ok := dailyData[dateKey]; !ok {
-			dailyData[dateKey] = logEntry.MonthlyPhysicalHealthRes{
-				Date:         dateKey,
-				AvgPainLevel: 0.0,
-			}
-		}
+        if _, ok := dailyData[dateKey]; !ok {
+            dailyData[dateKey] = logEntry.MonthlyPhysicalHealthRes{
+                Date:         dateKey,
+                AvgPainLevel: 0.0,
+            }
+        }
 
-		temp := dailyData[dateKey]
-		temp.AvgPainLevel += float64(entry.PainLevel)
-		dailyData[dateKey] = temp
-	}
+        temp := dailyData[dateKey]
+        temp.AvgPainLevel += float64(entry.PainLevel)
+        dailyData[dateKey] = temp
+    }
 
-	for day := startDate; day.Before(endDate); day = day.AddDate(0, 0, 2) {
-		dateKey := day.Format("2006-01-02")
-		if _, ok := dailyData[dateKey]; !ok {
-			dailyData[dateKey] = logEntry.MonthlyPhysicalHealthRes{
-				Date:         dateKey,
-				AvgPainLevel: 0.0,
-			}
-		}
-	}
+    for day := startDate; day.Before(endDate); day = day.AddDate(0, 0, 2) {
+        dateKey := day.Format("2006-01-02")
+        if _, ok := dailyData[dateKey]; !ok {
+            dailyData[dateKey] = logEntry.MonthlyPhysicalHealthRes{
+                Date:         dateKey,
+                AvgPainLevel: 0.0,
+            }
+        }
+    }
 
-	var dailyPhysicalHealthData []logEntry.MonthlyPhysicalHealthRes
+    var dailyPhysicalHealthData []logEntry.MonthlyPhysicalHealthRes
 
-	for _, data := range dailyData {
-		total := data.AvgPainLevel
-		count := len(logEntryData)
+    for _, data := range dailyData {
+        total := data.AvgPainLevel
+        count := len(logEntryData)
 
-		avg := total / float64(count)
-		avg = math.Round(avg*100) / 100
-		dailyPhysicalHealthData = append(dailyPhysicalHealthData, logEntry.MonthlyPhysicalHealthRes{
-			Date:         data.Date,
-			AvgPainLevel: avg,
-		})
-	}
+        if count > 0 {
+            avg := total / float64(count)
+            avg = math.Round(avg*100) / 100
+            dailyPhysicalHealthData = append(dailyPhysicalHealthData, logEntry.MonthlyPhysicalHealthRes{
+                Date:         data.Date,
+                AvgPainLevel: avg,
+            })
+        } else {
+            // Handle the case when count is zero (no data available)
+            dailyPhysicalHealthData = append(dailyPhysicalHealthData, logEntry.MonthlyPhysicalHealthRes{
+                Date:         data.Date,
+                AvgPainLevel: 0.0,
+            })
+        }
+    }
 
-	sort.Slice(dailyPhysicalHealthData, func(i, j int) bool {
-		dateI, _ := time.Parse("2006-01-02", dailyPhysicalHealthData[i].Date)
-		dateJ, _ := time.Parse("2006-01-02", dailyPhysicalHealthData[j].Date)
-		return dateI.Before(dateJ)
-	})
+    sort.Slice(dailyPhysicalHealthData, func(i, j int) bool {
+        dateI, _ := time.Parse("2006-01-02", dailyPhysicalHealthData[i].Date)
+        dateJ, _ := time.Parse("2006-01-02", dailyPhysicalHealthData[j].Date)
+        return dateI.Before(dateJ)
+    })
 
-	return dailyPhysicalHealthData, nil
+    return dailyPhysicalHealthData, nil
 }
