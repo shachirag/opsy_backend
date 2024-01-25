@@ -24,50 +24,80 @@ Thanks,
 }
 
 func ResendUserOtpEmailBodyHtml(otp string) *string {
-	s := `<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-	<html xmlns="http://www.w3.org/1999/xhtml">
-		<head>
-			<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-			<meta name="viewport" content="width=device-width, initial-scale=1.0">
-			<title>Reset your password and login</title>
-			<!--[if mso]><style type="text/css">body, table, td, a { font-family: Arial, Helvetica, sans-serif !important; }</style><![endif]-->
-		</head>
-		<body style="font-family: Helvetica, Arial, sans-serif; margin: 0px; padding: 0px; background-color: #ffffff;">
-			<table role="presentation"
-				style="width: 100%%; border-collapse: collapse; border: 0px; border-spacing: 0px; font-family: Arial, Helvetica, sans-serif; background-color: rgb(255, 255, 255);">
-				<tbody>
-					<tr>
-						<td align="center" style="padding: 1rem 2rem; vertical-align: top; width: 100%%;">
-							<table role="presentation" style="max-width: 600px; border-collapse: collapse; border: 0px; border-spacing: 0px; text-align: left;">
-								<tbody>
-									<tr>
-										<td style="padding: 40px 0px 0px;">
-											<div style="text-align: center;">
-												<div style="padding-bottom: 20px;"><img src="[App_Url]/logo/opsy_logo.png" alt="" style="width: 100px;"></div>
-											</div>
-											<div style="padding: 20px; background-color: rgb(237, 237, 237);">
-												<div style="color: rgb(19, 17, 18); text-align: center;">
-													<h3>Otp for reset password</h3>
-													<p style="padding-bottom: 16px">Please use the 6-digit OTP below for for reset password.</p>
-													<center style="padding-top: 8px; padding-bottom: 20px;"><strong style="font-size: 170%%;">[OTP]</strong></center>
+	s := `<!DOCTYPE html>
+	<html lang="en">
 	
-													<p style="padding-bottom: 16px">If you didn’t request this, you can ignore this email.</p>
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<title></title>
+		<style>
+			body {
+				font-family: Arial, sans-serif;
+				line-height: 1.6;
+				margin: 0;
+				padding: 0;
+			}
 	
-													<p style="padding-bottom: 16px">Thanks,<br><em><strong>Careville</strong></em></p>
-												</div>
-											</div>
-											<div style="padding-top: 20px; color: rgb(254, 98, 98); text-align: center;">
-												<p style="padding-bottom: 16px">Made with ♥ in Nigeria</p>
-											</div>
-										</td>
-									</tr>
-								</tbody>
-							</table>
-						</td>
-					</tr>
-				</tbody>
-			</table>
-		</body>
+			table {
+				width: 100%;
+				max-width: 600px;
+				margin: 0 auto;
+			}
+	
+			th,
+			td {
+				padding: 10px;
+				text-align: left;
+				border-bottom: 1px solid #ddd;
+			}
+	
+			th {
+				background-color: #4CAF50;
+				color: white;
+			}
+		</style>
+	</head>
+	
+	<body>
+		<table>
+			<tr>
+				<th colspan="2" style="text-align: left; padding:15px 15px 15px 0; background-color: #fff; color: white;">
+					<a href="#"><img style="width: 170px; height: auto;" src="[App_Url]/logo/opsy_logo.png" alt=""></a>
+				</th>
+			</tr>
+			<tr>
+				<td style="border: none;">
+					<h2>Resend OTP for Opsy Account</h2>
+				</td>
+			</tr>
+			<tr>
+				<td colspan="2" style="padding: 15px;">
+					<p>Dear User,</p>
+					<p>We noticed that you're in the process of securing your Opsy account, and we're here to assist you.
+						use the following One-Time Password (OTP) to verify your email:
+					</p>
+					<p><B>OTP: [Your OTP Code]</B></p>
+					<p>No need to worry about complicated steps—simply use this code in the Opsy app to proceed.
+					</p>
+					<p>
+						If you have any questions or encounter any issues, our support team is ready to help. Reach out to
+						us at <a href="">support@opsyapp.com</a>, and we'll get back to you promptly.
+					</p>
+					<p>Thank you for choosing Opsy to support your health and well-being journey.
+					</p>
+					<p>Best Regards,<br> <b>The Opsy Team</b></p>
+				</td>
+			</tr>
+			<tr>
+				<td colspan="2" style="text-align: center; padding: 15px; background-color: #f4f4f4;">
+					<p>This is a notification email from <b>The Opsy Team </b>. Please do not reply to this
+						email.</p>
+				</td>
+			</tr>
+		</table>
+	</body>
+	
 	</html>`
 	s = strings.ReplaceAll(s, "[Your OTP Code]", otp)
 	s = strings.ReplaceAll(s, "[App_Url]", os.Getenv("S3_BUCKET_URL"))
