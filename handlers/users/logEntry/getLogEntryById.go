@@ -23,13 +23,6 @@ import (
 // @Success 200 {object} logEntry.LogentryResDto
 // @Router /user/logentry-info/{id} [get]
 func FetchLogEntryById(c *fiber.Ctx) error {
-	// userId, err := auth.GetUserIdFromToken(c.Get("Authorization"))
-	// if err != nil {
-	// 	return c.Status(fiber.StatusUnauthorized).JSON(logEntry.LogentryResDto{
-	// 		Status:  false,
-	// 		Message: "Unauthorized: " + err.Error(),
-	// 	})
-	// }
 	var logentry entity.LogEntryEntity
 
 	logentryId := c.Params("id")
