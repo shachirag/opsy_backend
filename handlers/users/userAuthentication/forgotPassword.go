@@ -77,7 +77,7 @@ func ForgotPassword(c *fiber.Ctx) error {
 	}
 
 	// Sending email to the recipient with the OTP
-	_, err = utils.SendEmail(data.Email, otp)
+	_, err = utils.SendEmail(data.Email, user.Name, otp)
 	if err != nil {
 		return c.Status(500).JSON(userAuth.UserPasswordResDto{
 			Status:  false,

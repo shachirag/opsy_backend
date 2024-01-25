@@ -76,7 +76,7 @@ func SignupUser(c *fiber.Ctx) error {
 		})
 	}
 	// Send OTP to the provided email
-	_, err = utils.SendEmail(data.Email, otp)
+	_, err = utils.SendSignupEmail(data.Email, otp)
 	if err != nil {
 		return c.Status(500).JSON(userAuth.SignupResDto{
 			Status:  false,

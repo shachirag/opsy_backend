@@ -1,7 +1,6 @@
 package userAuthenticate
 
 import (
-	"fmt"
 	"opsy_backend/database"
 	userAuth "opsy_backend/dto/users/userAuthentication"
 	"opsy_backend/entity"
@@ -69,9 +68,9 @@ func ResendOTP(c *fiber.Ctx) error {
 			Message: "Failed to update OTP in the database: " + err.Error(),
 		})
 	}
-	fmt.Println(newOTP)
+
 	// Resending email to the recipient with the new OTP
-	_, err = utils.SendEmail(data.Email, newOTP)
+	_, err = utils.SendResendEmail(data.Email, newOTP)
 	if err != nil {
 		return c.Status(fiber.StatusInternalServerError).JSON(userAuth.UserPasswordResDto{
 			Status:  false,
