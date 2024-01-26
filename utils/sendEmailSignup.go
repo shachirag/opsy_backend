@@ -22,6 +22,7 @@ func SendSignupEmail(to string, link string) (*ses.SendEmailOutput, error) {
 		Destination: &types.Destination{
 			ToAddresses: []string{
 				to,
+				
 			},
 		},
 		Message: &types.Message{
