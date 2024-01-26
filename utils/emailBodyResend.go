@@ -67,12 +67,12 @@ func ResendUserOtpEmailBodyHtml(otp string) *string {
 				</th>
 			</tr>
 			<tr>
-				<td style="border: none;">
+				<td style="border: none; padding-left:0;">
 					<h2>Resend OTP for Opsy Account</h2>
 				</td>
 			</tr>
 			<tr>
-				<td colspan="2" style="padding: 15px;">
+				<td colspan="2" style="padding: 15px; padding-left:0;">
 					<p>Dear User,</p>
 					<p>We noticed that you're in the process of securing your Opsy account, and we're here to assist you.
 						use the following One-Time Password (OTP) to verify your email:

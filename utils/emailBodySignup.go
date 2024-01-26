@@ -67,12 +67,12 @@ func SignupUserOtpEmailBodyHtml(otp string) *string {
 				</th>
 			</tr>
 			<tr>
-				<td style="border: none;">
+				<td style="border: none; padding-left:0;">
 					<h2>Welcome to Opsy - Your Personal Health Companion!</h2>
 				</td>
 			</tr>
 			<tr>
-				<td colspan="2" style="padding: 15px;">
+				<td colspan="2" style="padding: 15px; padding-left:0;">
 					<p>Dear User,</p>
 					<p>Welcome to Opsy, your all-in-one app for managing your physical and mental health! We're thrilled to
 						have you on board, and we can't wait to help you on your journey towards a healthier and happier

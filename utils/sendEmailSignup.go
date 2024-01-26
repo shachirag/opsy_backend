@@ -12,7 +12,7 @@ import (
 
 func SendSignupEmail(to string, link string) (*ses.SendEmailOutput, error) {
 	var (
-		subject2    = aws.String("otp for user signup")
+		subject2    = aws.String("User Signup Request")
 		senderEmail = os.Getenv("SENDER_EMAIL")
 		charSet     = aws.String("UTF-8")
 	)
@@ -22,7 +22,7 @@ func SendSignupEmail(to string, link string) (*ses.SendEmailOutput, error) {
 		Destination: &types.Destination{
 			ToAddresses: []string{
 				to,
-				
+
 			},
 		},
 		Message: &types.Message{
