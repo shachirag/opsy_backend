@@ -21,8 +21,7 @@ func SendResendEmail(to string, link string) (*ses.SendEmailOutput, error) {
 	input := &ses.SendEmailInput{
 		Destination: &types.Destination{
 			ToAddresses: []string{
-				// to,
-				"opsy@yopmail.com",
+				to,
 			},
 		},
 		Message: &types.Message{
