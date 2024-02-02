@@ -12,7 +12,7 @@ import (
 
 func UsersSetupsRoutes(app *fiber.App) {
 
-	app.Static("/", ".puplic")
+	app.Static("/", "./public")
 
 	/* ---------- HEALTH ---------- */
 	app.Get("/health", handlers.HealthCheck)
