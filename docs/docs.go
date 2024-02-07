@@ -138,6 +138,45 @@ const docTemplate = `{
                 }
             }
         },
+        "/user/delete-appointment": {
+            "put": {
+                "description": "delete appointment",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "user logEntry"
+                ],
+                "summary": "delete appointment",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Authentication header",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "customer ID",
+                        "name": "id",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/logEntry.DeleteResDto"
+                        }
+                    }
+                }
+            }
+        },
         "/user/edit-appointment/{id}": {
             "put": {
                 "description": "Update appointment",

@@ -566,6 +566,32 @@ paths:
       summary: delete account
       tags:
       - user authorization
+  /user/delete-appointment:
+    put:
+      consumes:
+      - application/json
+      description: delete appointment
+      parameters:
+      - description: Authentication header
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: customer ID
+        in: query
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/logEntry.DeleteResDto'
+      summary: delete appointment
+      tags:
+      - user logEntry
   /user/edit-appointment/{id}:
     put:
       consumes:
