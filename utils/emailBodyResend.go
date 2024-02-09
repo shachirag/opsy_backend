@@ -9,7 +9,7 @@ import (
 )
 
 func ResendUserOtpEmailBodyText(otp string) *string {
-	s := fmt.Sprintf(`## Otp for User reset password
+	s := fmt.Sprintf(`## OTP resend request
 
 Please use the 6-digit OTP below for reset password.
 
@@ -18,7 +18,7 @@ Please use the 6-digit OTP below for reset password.
 If you didn’t request this, you can ignore this email.
 
 Thanks,
-***Careville***`, otp)
+***OPSY***`, otp)
 
 	return aws.String(s)
 }

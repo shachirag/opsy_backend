@@ -9,7 +9,7 @@ import (
 )
 
 func ForgotSignupUserOtpEmailBodyText(otp string) *string {
-	s := fmt.Sprintf(`## Otp for Reset password
+	s := fmt.Sprintf(`## OTP for Reset password
 
 Please use the 6-digit OTP below for Reset password.
 
