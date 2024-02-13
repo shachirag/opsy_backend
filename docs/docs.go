@@ -236,6 +236,132 @@ const docTemplate = `{
                 }
             }
         },
+        "/user/edit-mentalHealth/{id}": {
+            "put": {
+                "description": "Update mentalHealth",
+                "consumes": [
+                    "multipart/form-data"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "logEntry"
+                ],
+                "summary": "Update mentalHealth",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Authentication header",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "mentalHealth ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "name": "feel",
+                        "in": "formData"
+                    },
+                    {
+                        "type": "string",
+                        "name": "notes",
+                        "in": "formData"
+                    },
+                    {
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        },
+                        "collectionFormat": "csv",
+                        "name": "ways",
+                        "in": "formData"
+                    },
+                    {
+                        "type": "string",
+                        "name": "when",
+                        "in": "formData"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/logEntry.EditMentalHealthResDto"
+                        }
+                    }
+                }
+            }
+        },
+        "/user/edit-physicalHealth/{id}": {
+            "put": {
+                "description": "Update physicalHealth",
+                "consumes": [
+                    "multipart/form-data"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "logEntry"
+                ],
+                "summary": "Update physicalHealth",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Authentication header",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "physicalHealth ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "name": "notes",
+                        "in": "formData"
+                    },
+                    {
+                        "type": "integer",
+                        "name": "painLevel",
+                        "in": "formData"
+                    },
+                    {
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        },
+                        "collectionFormat": "csv",
+                        "name": "ways",
+                        "in": "formData"
+                    },
+                    {
+                        "type": "string",
+                        "name": "when",
+                        "in": "formData"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/logEntry.EditPhysicalHealthResDto"
+                        }
+                    }
+                }
+            }
+        },
         "/user/fetch-all-data": {
             "get": {
                 "description": "fetch all required data",
@@ -940,6 +1066,28 @@ const docTemplate = `{
             }
         },
         "logEntry.DeleteResDto": {
+            "type": "object",
+            "properties": {
+                "message": {
+                    "type": "string"
+                },
+                "status": {
+                    "type": "boolean"
+                }
+            }
+        },
+        "logEntry.EditMentalHealthResDto": {
+            "type": "object",
+            "properties": {
+                "message": {
+                    "type": "string"
+                },
+                "status": {
+                    "type": "boolean"
+                }
+            }
+        },
+        "logEntry.EditPhysicalHealthResDto": {
             "type": "object",
             "properties": {
                 "message": {

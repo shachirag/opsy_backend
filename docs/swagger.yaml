@@ -62,6 +62,20 @@ definitions:
       status:
         type: boolean
     type: object
+  logEntry.EditMentalHealthResDto:
+    properties:
+      message:
+        type: string
+      status:
+        type: boolean
+    type: object
+  logEntry.EditPhysicalHealthResDto:
+    properties:
+      message:
+        type: string
+      status:
+        type: boolean
+    type: object
   logEntry.FutureAppointmentDto:
     properties:
       data:
@@ -628,6 +642,88 @@ paths:
           schema:
             $ref: '#/definitions/logEntry.GetAppointmentResDto'
       summary: Update appointment
+      tags:
+      - logEntry
+  /user/edit-mentalHealth/{id}:
+    put:
+      consumes:
+      - multipart/form-data
+      description: Update mentalHealth
+      parameters:
+      - description: Authentication header
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: mentalHealth ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - in: formData
+        name: feel
+        type: string
+      - in: formData
+        name: notes
+        type: string
+      - collectionFormat: csv
+        in: formData
+        items:
+          type: string
+        name: ways
+        type: array
+      - in: formData
+        name: when
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/logEntry.EditMentalHealthResDto'
+      summary: Update mentalHealth
+      tags:
+      - logEntry
+  /user/edit-physicalHealth/{id}:
+    put:
+      consumes:
+      - multipart/form-data
+      description: Update physicalHealth
+      parameters:
+      - description: Authentication header
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: physicalHealth ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - in: formData
+        name: notes
+        type: string
+      - in: formData
+        name: painLevel
+        type: integer
+      - collectionFormat: csv
+        in: formData
+        items:
+          type: string
+        name: ways
+        type: array
+      - in: formData
+        name: when
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/logEntry.EditPhysicalHealthResDto'
+      summary: Update physicalHealth
       tags:
       - logEntry
   /user/fetch-all-data:
