@@ -87,5 +87,6 @@ func SignupUser(c *fiber.Ctx) error {
 	return c.Status(fiber.StatusOK).JSON(userAuth.SignupResDto{
 		Status:  true,
 		Message: "otp send successfully",
+		
 	})
 }
