@@ -9,7 +9,7 @@ import (
 )
 
 func SignupUserOtpEmailBodyText(otp string) *string {
-	s := fmt.Sprintf(`## Otp for Signup
+	s := fmt.Sprintf(`## OTP for Signup
 
 Please use the 6-digit OTP below for signup.
 
