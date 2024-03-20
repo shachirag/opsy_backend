@@ -31,7 +31,6 @@ func ChangeUserPassword(c *fiber.Ctx) error {
 		data     userAuth.ChangeUserPasswordReqDto
 	)
 
-	
 	// Parsing the request body
 	err := c.BodyParser(&data)
 	if err != nil {

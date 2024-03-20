@@ -81,10 +81,9 @@ func ResendUserOtpEmailBodyHtml(otp string) *string {
 					<p>No need to worry about complicated steps—simply use this code in the Opsy app to proceed.
 					</p>
 					<p>
-						If you have any questions or encounter any issues, our support team is ready to help. Reach out to
-						us at <a href="">support@opsyapp.com</a>, and we'll get back to you promptly.
+						If you have any questions or  need assistance, feel free to reach out to our support team at support@opsyapp.com </a>, and we'll get back to you promptly.
 					</p>
-					<p>Thank you for choosing Opsy to support your health and well-being journey.
+					<p>Thank you for choosing Opsy to be your personal health tracker!
 					</p>
 					<p>Best Regards,<br> <b>The Opsy Team</b></p>
 				</td>

@@ -74,29 +74,24 @@ func SignupUserOtpEmailBodyHtml(otp string) *string {
 			<tr>
 				<td colspan="2" style="padding: 15px; padding-left:0;">
 					<p>Dear User,</p>
-					<p>Welcome to Opsy, your all-in-one app for managing your physical and mental health! We're thrilled to
-						have you on board, and we can't wait to help you on your journey towards a healthier and happier
-						life.
+					<p>Welcome to Opsy, your all-in-one app for managing your physical and mental health!To get started, please use the following One-Time Password (OTP) to verify your email and complete
+					the registration process:
 					</p>
-					<p>To get started, please use the following One-Time Password (OTP) to verify your email and complete
-						the registration process:</p>
 					<p><B>OTP: [Your OTP Code]</B></p>
 					<p>Once you've verified your email, you'll have access to Opsy's powerful features, including:
 					</p>
 					<p>
 					<ul>
-						<li style="list-style: decimal;"><b>Health Inputs:</b> Easily log and track your physical and mental
-							health
-							data. Whether it's daily
-							steps, mood, sleep patterns, or any other health-related input, Opsy makes it simple to monitor
-							and analyze your well-being.</li>
+						<li style="list-style: decimal;"><b>Health Tracking:</b> Opsy simplifies the process of logging and monitoring your physical and mental health data.
+						Whether you're tracking your pain level or any other health-related input, 
+						Opsy provides an easy-to-use platform for monitoring and analyzing your overall well-being. </li>
 						<li style="list-style: decimal;"><b>Appointments:</b>
 							Keep track of your upcoming appointments effortlessly. Opsy allows you to input and manage your
 							appointments, ensuring you never miss an important date.</li>
 						<li style="list-style: decimal;">
 							<b>Graphical Insights:</b>
 							Gain valuable insights into your health trends with our intuitive weekly, monthly, and yearly
-							graphs. Visualize your progress over time and make informed decisions about your well-being.
+							graphs.
 						</li>
 					</ul>
 					</p>
@@ -113,8 +108,7 @@ func SignupUserOtpEmailBodyHtml(otp string) *string {
 						<a href="">support@opsyapp.com</a>
 						.
 					</p>
-					<p>Thank you for choosing Opsy to be your health companion. We look forward to supporting you on your
-						journey to a healthier and happier life!<br>
+					<p>Thank you for choosing Opsy to be your personal health tracker!<br>
 					</p>
 					<p>Best Regards,<br> <b>The Opsy Team</b></p>
 				</td>
