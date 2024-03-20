@@ -68,12 +68,11 @@ func SignupUserOtpEmailBodyHtml(otp string) *string {
 			</tr>
 			<tr>
 				<td style="border: none; padding-left:0;">
-					<h2>Welcome to Opsy - Your Personal Health Companion!</h2>
+					<h2>Verify Your Opsy Account Email</h2>
 				</td>
 			</tr>
 			<tr>
 				<td colspan="2" style="padding: 15px; padding-left:0;">
-					<p>Dear User,</p>
 					<p>Welcome to Opsy, your all-in-one app for managing your physical and mental health!To get started, please use the following One-Time Password (OTP) to verify your email and complete
 					the registration process:
 					</p>
