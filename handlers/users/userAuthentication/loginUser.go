@@ -49,7 +49,7 @@ func LoginUser(c *fiber.Ctx) error {
 		if err == mongo.ErrNoDocuments {
 			return c.Status(500).JSON(userAuth.LoginResDto{
 				Status:  false,
-				Message: "The email address you entered is incorrect",
+				Message: "The email address you entered is incorrect.",
 			})
 		}
 		return c.Status(500).JSON(userAuth.LoginResDto{
@@ -62,7 +62,7 @@ func LoginUser(c *fiber.Ctx) error {
 	if err != nil {
 		return c.Status(500).JSON(userAuth.LoginResDto{
 			Status:  false,
-			Message: "The password you entered is incorrect",
+			Message: "The password you entered is incorrect.",
 		})
 	}
 

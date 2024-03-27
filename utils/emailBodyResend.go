@@ -68,7 +68,6 @@ func ResendUserOtpEmailBodyHtml(otp string) *string {
 			</tr>
 			<tr>
 				<td style="border: none; padding-left:0;">
-					<h2>Resend OTP for Opsy Account</h2>
 				</td>
 			</tr>
 			<tr>
@@ -81,7 +80,7 @@ func ResendUserOtpEmailBodyHtml(otp string) *string {
 					<p>No need to worry about complicated steps—simply use this code in the Opsy app to proceed.
 					</p>
 					<p>
-						If you have any questions or  need assistance, feel free to reach out to our support team at support@opsyapp.com </a>, and we'll get back to you promptly.
+						If you have any questions or  need assistance, feel free to reach out to our support team at support@opsyapp.com.​</a>, and we'll get back to you promptly.
 					</p>
 					<p>Thank you for choosing Opsy to be your personal health tracker!
 					</p>
@@ -90,8 +89,7 @@ func ResendUserOtpEmailBodyHtml(otp string) *string {
 			</tr>
 			<tr>
 				<td colspan="2" style="text-align: center; padding: 15px; background-color: #f4f4f4;">
-					<p>This is a notification email from <b>The Opsy Team </b>. Please do not reply to this
-						email.</p>
+					<p>This is a notification email from the Opsy Team. Please do not reply to this email.</p>
 				</td>
 			</tr>
 		</table>

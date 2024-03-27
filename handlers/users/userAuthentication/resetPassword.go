@@ -43,7 +43,7 @@ func ResetPasswordAfterOtp(c *fiber.Ctx) error {
 		if err == mongo.ErrNoDocuments {
 			return c.Status(404).JSON(userAuth.UserPasswordResDto{
 				Status:  false,
-				Message: "No user found",
+				Message: "We couldn’t find an account with that email address.​",
 			})
 		}
 

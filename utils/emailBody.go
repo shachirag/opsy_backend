@@ -68,7 +68,6 @@ func ForgotUserOtpEmailBodyHtml(name string, otp string) *string {
 			</tr>
 			<tr>
 				<td style="border: none; padding-left:0;">
-					<h2>Reset Your Opsy Password</h2>
 				</td>
 			</tr>
 			<tr>

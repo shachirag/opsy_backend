@@ -14,7 +14,7 @@ func SendEmail(to string, name string, link string) (*ses.SendEmailOutput, error
 	var (
 		senderEmail = os.Getenv("SENDER_EMAIL")
 		charSet     = aws.String("UTF-8")
-		subject     = aws.String("otp for user reset password")
+		subject     = aws.String("Reset Your Opsy Password")
 	)
 	sesClient := database.GetSesClient()
 
