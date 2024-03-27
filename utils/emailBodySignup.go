@@ -72,7 +72,7 @@ func SignupUserOtpEmailBodyHtml(otp string) *string {
 			</tr>
 			<tr>
 				<td colspan="2" style="padding: 15px; padding-left:0;">
-					<p>Welcome to Opsy, your all-in-one app for managing your physical and mental health! to get started, please use the following One-Time Password (OTP) to verify your email and complete
+					<p>Welcome to Opsy, your all-in-one app for managing your physical and mental health! To get started, please use the following One-Time Password (OTP) to verify your email and complete
 					the registration process:
 					</p>
 					<p><B>OTP: [Your OTP Code]</B></p>
@@ -103,8 +103,9 @@ func SignupUserOtpEmailBodyHtml(otp string) *string {
 					</ul>
 					</p>
 					<p>If you have any questions or need assistance, feel free to reach out to our support team at
-						<a href="">support@opsyapp.com. Thank you for choosing Opsy to be your personal health tracker.</a>
+						<a style="color:#87CEEB ; text-decoration: underline;" href="">support@opsyapp.com.</a>
 					</p>
+					<p>Thank you for choosing Opsy to be your personal health tracker.</p>
 					<p>Best Regards,<br> <b>The Opsy Team</b></p>
 				</td>
 			</tr>
