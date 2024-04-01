@@ -31,6 +31,7 @@ func ChangeUserPassword(c *fiber.Ctx) error {
 		data     userAuth.ChangeUserPasswordReqDto
 	)
 
+	
 	// Parsing the request body
 	err := c.BodyParser(&data)
 	if err != nil {
@@ -88,7 +89,7 @@ func ChangeUserPassword(c *fiber.Ctx) error {
 		if err != nil {
 			return c.Status(fiber.StatusBadRequest).JSON(userAuth.ChangeUserPasswordResDto{
 				Status:  false,
-				Message: "The current password you entered is incorrect.",
+				Message: "Current password is incorrect",
 			})
 		}
 	}
