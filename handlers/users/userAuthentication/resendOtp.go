@@ -80,6 +80,6 @@ func ResendOTP(c *fiber.Ctx) error {
 
 	return c.Status(fiber.StatusOK).JSON(userAuth.UserPasswordResDto{
 		Status:  true,
-		Message: "Successfully resent 6 digit OTP.",
+		Message: "A new 6-digit OTP has been resent to your email.",
 	})
 }

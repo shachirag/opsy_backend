@@ -121,7 +121,7 @@ func SignupUserOtpEmailBodyHtml(otp string) *string {
 			</tr>
 			<tr>
 				<td colspan="2" style="text-align: center; padding: 15px; background-color: #f4f4f4;">
-					<p>This is a notification email from <b>The Opsy Team </b>. Please do not reply to this
+					<p>This is a notification email from <b>The Opsy Team.</b> Please do not reply to this
 						email.</p>
 				</td>
 			</tr>
