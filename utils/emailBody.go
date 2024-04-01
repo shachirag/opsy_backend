@@ -68,7 +68,6 @@ func ForgotUserOtpEmailBodyHtml(name string, otp string) *string {
 			</tr>
 			<tr>
 				<td style="border: none; padding-left:0;">
-					<h2>Reset Your Opsy Password - Secure Your Account</h2>
 				</td>
 			</tr>
 			<tr>
@@ -101,7 +100,7 @@ func ForgotUserOtpEmailBodyHtml(name string, otp string) *string {
 						to assist you.
 					</p>
 					<p>Thank you for trusting Opsy with your health journey. We're committed to providing a safe and secure
-						environment for you to manage your well-being.<br>
+						environment for you to track your health and well-being.<br>
 					</p>
 					<p>Best Regards,<br> <b>The Opsy Team</b></p>
 				</td>

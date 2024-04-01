@@ -12,7 +12,7 @@ import (
 
 func SendResendEmail(to string, link string) (*ses.SendEmailOutput, error) {
 	var (
-		subject2    = aws.String("otp for user reset password")
+		subject2    = aws.String("Reset Your Opsy Password")
 		senderEmail = os.Getenv("SENDER_EMAIL")
 		charSet     = aws.String("UTF-8")
 	)

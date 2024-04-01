@@ -51,7 +51,7 @@ func VerifyOtp(c *fiber.Ctx) error {
 		if err == mongo.ErrNoDocuments {
 			return c.Status(400).JSON(userAuth.UserPasswordResDto{
 				Status:  false,
-				Message: "Invalid OTP",
+				Message: "Invalid OTP.",
 			})
 		}
 
@@ -66,7 +66,7 @@ func VerifyOtp(c *fiber.Ctx) error {
 
 		return c.Status(400).JSON(userAuth.UserPasswordResDto{
 			Status:  false,
-			Message: "Invalid OTP",
+			Message: "Invalid OTP.",
 		})
 	}
 

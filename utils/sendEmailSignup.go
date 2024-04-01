@@ -12,7 +12,7 @@ import (
 
 func SendSignupEmail(to string, link string) (*ses.SendEmailOutput, error) {
 	var (
-		subject2    = aws.String("User Signup Request")
+		subject2    = aws.String("Verify Your Opsy Account Email")
 		senderEmail = os.Getenv("SENDER_EMAIL")
 		charSet     = aws.String("UTF-8")
 	)
